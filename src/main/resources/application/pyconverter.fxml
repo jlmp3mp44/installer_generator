@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/20"
+  xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controllers.PyConverterController"
+  style="-fx-background-color: #F0F8FF; -fx-padding: 20;" prefWidth="600" prefHeight="600">
+
+  <!-- Заголовок -->
+  <Label text="Python to EXE Converter" style="-fx-font-size: 24px; -fx-text-fill: #2F4F4F;" wrapText="true"/>
+
+  <!-- Вибір файлу -->
+  <HBox spacing="10" alignment="CENTER">
+    <Label text="Select Python File:" style="-fx-font-size: 16px; -fx-text-fill: #2F4F4F;"/>
+    <TextField fx:id="pyFilePath" promptText="Enter or browse Python file..." prefWidth="300"/>
+    <Button text="Browse" onAction="#browsePyFile" style="-fx-background-color: #4682B4; -fx-text-fill: white;"/>
+  </HBox>
+
+  <!-- Вибір шляху збереження -->
+  <HBox spacing="10" alignment="CENTER">
+    <Label text="Save EXE To:" style="-fx-font-size: 16px; -fx-text-fill: #2F4F4F;"/>
+    <TextField fx:id="exeSavePath" promptText="Enter or browse save location..." prefWidth="300"/>
+    <Button text="Browse" onAction="#browseSavePath" style="-fx-background-color: #4682B4; -fx-text-fill: white;"/>
+  </HBox>
+
+  <!-- Введення ліцензійного ключа -->
+  <HBox spacing="10" alignment="CENTER">
+    <Label text="License Key (Optional):" style="-fx-font-size: 16px; -fx-text-fill: #2F4F4F;"/>
+    <TextField fx:id="licenseKey" promptText="Enter license key (optional)..." prefWidth="300"/>
+  </HBox>
+
+  <!-- Кнопка конвертації -->
+  <Button text="Convert to EXE" onAction="#handleConvert" style="-fx-background-color: #32CD32; -fx-text-fill: white; -fx-font-size: 16px; -fx-border-radius: 5; -fx-background-radius: 5;" />
+</VBox>
