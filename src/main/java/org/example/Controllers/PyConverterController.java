@@ -5,12 +5,11 @@ import entities.InputFile;
 import entities.OutputFile;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.builder.Installer;
-import org.example.builder.InstallerBuilder;
-import org.example.builder.InstallerBuilderImpl;
 
 import java.io.File;
 
@@ -20,12 +19,13 @@ public class PyConverterController {
   private TextField pyFilePath;
 
   @FXML
-  private TextField exeSavePath;
+  private TextField savePath;
 
   @FXML
   private TextField licenseKey;
 
-  private final InstallerBuilder builder = new InstallerBuilderImpl();
+  @FXML
+  private ComboBox<String> outputFormat;
 
   @FXML
   private void browsePyFile(ActionEvent event) {
@@ -33,49 +33,54 @@ public class PyConverterController {
     fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Python Files", "*.py"));
     File selectedFile = fileChooser.showOpenDialog(new Stage());
     if (selectedFile != null) {
-      pyFilePath.setText(selectedFile.getAbsolutePath());
+      pyFilePath.setText(selectedFile.getAbsolutePath().replace("\\", "\\\\"));
     }
   }
 
   @FXML
   private void browseSavePath(ActionEvent event) {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setInitialFileName("output.exe");
-    File selectedFile = fileChooser.showSaveDialog(new Stage());
-    if (selectedFile != null) {
-      exeSavePath.setText(selectedFile.getAbsolutePath());
+    javafx.stage.DirectoryChooser directoryChooser = new javafx.stage.DirectoryChooser();
+    directoryChooser.setTitle("Select Save Directory");
+    File selectedDirectory = directoryChooser.showDialog(new Stage());
+    if (selectedDirectory != null) {
+      String format = outputFormat.getValue();
+      String fileName = (format != null && format.equalsIgnoreCase("MSI")) ? "output.msi" : "output.exe";
+      savePath.setText(selectedDirectory.getAbsolutePath().replace("\\", "\\\\") + "\\\\" + fileName);
     }
   }
+
 
   @FXML
   private void handleConvert(ActionEvent event) {
     String pyFile = pyFilePath.getText();
-    String savePath = exeSavePath.getText();
+    String saveLocation = savePath.getText();
+    String format = outputFormat.getValue();
     String key = licenseKey.getText();
 
-    if (pyFile.isEmpty() || savePath.isEmpty()) {
-      System.out.println("Please select the Python file and save location.");
+    if (pyFile.isEmpty() || saveLocation.isEmpty() || format == null) {
+      System.out.println("Please select the Python file, save location, and output format.");
       return;
     }
 
     System.out.println("Converting...");
     System.out.println("Python File: " + pyFile);
-    System.out.println("Save Path: " + savePath);
+    System.out.println("Save Path: " + saveLocation);
+    System.out.println("Output Format: " + format);
 
-    // Створення сутностей через Builder
     InputFile inputFile = new InputFile(pyFile, InputFile.FileType.PY);
-    OutputFile outputFile = new OutputFile(savePath, OutputFile.FileType.EXE);
+    OutputFile outputFile = new OutputFile(saveLocation, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
     ConversionSettings settings = new ConversionSettings();
     settings.setLicenseKey(key);
-    settings.setAddShortcut(true); // Наприклад, за замовчуванням додаємо ярлик
-    settings.setInstallPath(savePath);
+    settings.setAddShortcut(true);
+    settings.setInstallPath(saveLocation);
 
-    builder.addFile(inputFile);
-    builder.setOutputFile(outputFile);
-    builder.setConversionSettings(settings);
+    // Використання внутрішнього класу Builder
+    Installer installer = new Installer.Builder()
+        .addFile(inputFile)
+        .setConversionSettings(settings)
+        .setOutputFile(outputFile)
+        .build();
 
-    // Створення інсталятора і запуск
-    Installer installer = builder.build();
     installer.generatePackage();
 
     System.out.println("Conversion completed!");

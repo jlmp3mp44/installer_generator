@@ -28,4 +28,33 @@ public class Installer {
 
     // Інша логіка генерації пакету
   }
+
+  public static class Builder {
+    private InputFile file;
+    private ConversionSettings settings;
+    private OutputFile outputFile;
+
+    public Builder addFile(InputFile file) {
+      this.file = file;
+      return this;
+    }
+
+    public Builder setConversionSettings(ConversionSettings settings) {
+      this.settings = settings;
+      return this;
+    }
+
+    public Builder setOutputFile(OutputFile outputFile) {
+      this.outputFile = outputFile;
+      return this;
+    }
+
+    public Installer build() {
+      if (file == null || settings == null || outputFile == null) {
+        throw new IllegalStateException("All fields must be set before building.");
+      }
+      return new Installer(file, settings, outputFile);
+    }
+  }
+
 }

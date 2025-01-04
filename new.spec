@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['D:\\java_web\\new.py'],
+    ['D:\\\\java_web\\\\new.py'],
     pathex=[],
     binaries=[],
     datas=[],
