@@ -6,9 +6,9 @@ import javafx.stage.Stage;
 public class Start extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/welcome.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/login.fxml"));
     primaryStage.setScene(new Scene(loader.load()));
-    primaryStage.setTitle("Сторінка вітання");
+    primaryStage.setTitle("Сторінка авторизації");
     primaryStage.show();
   }
 

@@ -10,6 +10,9 @@ public class ConverterFactory {
     else if (inputFileType.equalsIgnoreCase("py") && outputFileType.equalsIgnoreCase("msi")) {
       return new PyToMsiConverter();
     }
+    else if (inputFileType.equalsIgnoreCase("jar") && outputFileType.equalsIgnoreCase("exe")) {
+      return new JarToExeConverter();
+    }
     else if (inputFileType.equalsIgnoreCase("jar") && outputFileType.equalsIgnoreCase("msi")) {
       return new JarToMsiConverter();
     }

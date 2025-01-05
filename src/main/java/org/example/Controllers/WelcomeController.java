@@ -5,38 +5,49 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class WelcomeController {
-  @FXML
-  private void handleStart(ActionEvent event) {
-    System.out.println("Кнопка натиснута! Починаємо роботу.");
 
+  @FXML
+  private void handlePythonConvert(ActionEvent event) {
+    navigateToPage(event, "/application/pyconverter.fxml", "Python File Converter");
+  }
+
+  @FXML
+  private void handleJarConvert(ActionEvent event) {
+    navigateToPage(event, "/application/jarconverter.fxml", "JAR File Converter");
+  }
+
+  private void navigateToPage(ActionEvent event, String fxmlPath, String title) {
     try {
-      // Завантажуємо FXML для сторінки конвертації
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/pyconverter.fxml"));
+      // Завантаження нової сторінки
+      FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
       VBox root = loader.load();
 
-      // Створюємо нову сцену
+      // Створення нової сцени
       Stage stage = new Stage();
-      stage.setTitle("Python to EXE Converter");
+      stage.setTitle(title);
       stage.setScene(new Scene(root, 600, 600));
       stage.show();
 
-      // Закриваємо поточне вікно (якщо потрібно)
+      // Закриття поточного вікна
       Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
       currentStage.close();
     } catch (IOException e) {
-      Alert alert = new Alert(AlertType.ERROR);
-      alert.setTitle("Error");
-      alert.setHeaderText("Failed to load the converter page");
-      alert.setContentText("An error occurred while trying to load the Python converter page.");
-      alert.showAndWait();
+      showError("Failed to load the page", "An error occurred while trying to load the page.");
       e.printStackTrace();
     }
+  }
+
+  private void showError(String header, String content) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Error");
+    alert.setHeaderText(header);
+    alert.setContentText(content);
+    alert.showAndWait();
   }
 }

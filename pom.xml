@@ -25,6 +25,21 @@
       <version>20</version>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.akathist.maven.plugins.launch4j</groupId>
+        <artifactId>launch4j-maven-plugin</artifactId>
+        <version>1.7.25</version>
+        <configuration>
+          <headerType>gui</headerType>
+          <outfile>target/output.exe</outfile>
+          <jar>target/input.jar</jar>
+          <dontWrapJar>false</dontWrapJar>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 
 

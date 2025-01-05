@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['D:/trpz_courcework/test/new.py'],
+    ['D:\\\\trpz_courcework\\\\test\\\\HelloWorld.jar'],
     pathex=[],
     binaries=[],
     datas=[],
@@ -22,7 +22,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='new',
+    name='HelloWorld',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

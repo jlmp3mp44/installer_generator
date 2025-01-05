@@ -5,8 +5,9 @@ import org.example.converter.ConverterFactory;
 import entities.ConversionSettings;
 import entities.InputFile;
 import entities.OutputFile;
+import org.example.observer.InstallationSubject;
 
-public class Installer {
+public class Installer extends InstallationSubject {
   private InputFile file;
   private ConversionSettings settings;
   private OutputFile outputFile;
@@ -18,15 +19,25 @@ public class Installer {
   }
 
   public void generatePackage() {
+    notifyObservers("Starting package generation...", 0);
+
     System.out.println("Generating " + outputFile.getFileType() + " file at " + outputFile.getFilePath());
+    notifyObservers("Preparing conversion...", 20);
 
     // Викликаємо фабрику для отримання правильного конвертера
-    Converter converter = ConverterFactory.createConverter(file.getFileType().toString(), outputFile.getFileType().toString());
+    Converter converter = ConverterFactory.createConverter(
+        file.getFileType().toString(),
+        outputFile.getFileType().toString()
+    );
 
+    notifyObservers("Converting file...", 50);
     // Виконуємо конвертацію
     converter.convert(file.getFilePath(), outputFile.getFilePath());
 
+    notifyObservers("Finalizing package generation...", 80);
     // Інша логіка генерації пакету
+    notifyObservers("Package generation completed successfully!", 100);
+    notifyCompletion();
   }
 
   public static class Builder {
@@ -56,5 +67,5 @@ public class Installer {
       return new Installer(file, settings, outputFile);
     }
   }
-
 }
+
