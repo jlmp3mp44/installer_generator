@@ -4,6 +4,7 @@ import entities.ConversionSettings;
 import entities.InputFile;
 import entities.OutputFile;
 import javafx.stage.DirectoryChooser;
+import org.example.server.Client;
 import org.example.validation.DirectoryExistsHandler;
 import org.example.validation.FileExistsHandler;
 import org.example.validation.FileFormatHandler;
@@ -55,6 +56,8 @@ public class PyConverterController {
   @FXML
   private TextField outputFileName;
 
+  private Client client;
+
   // Ланцюжки валідації для різних полів
   private final ValidationHandler pyFileValidator;
   private final ValidationHandler savePathValidator;
@@ -69,6 +72,7 @@ public class PyConverterController {
     savePathValidator = new NotEmptyHandler();
     savePathValidator.setNext(new DirectoryExistsHandler());
 
+    client =  new Client();
    // licenseKeyValidator = new NotEmptyHandler();
    // licenseKeyValidator.setNext(new LicenseKeyFormatHandler());
   }
@@ -150,6 +154,17 @@ public class PyConverterController {
           .setConversionSettings(settings)
           .setOutputFile(outputFile)
           .build();
+
+
+      String saveRequest = String.format("SAVE_FILE %d %s %s %s %s %s",
+          1, // user_id, замініть на реального користувача
+          inputFile.getFilePath(),
+          inputFile.getFileType().name(),
+          outputFile.getFilePath(),
+          outputFile.getFileType().name(),
+          outputFile.getIcon() != null ? outputFile.getIcon() : "NULL");
+
+      String response = client.sendRequest(saveRequest);
 
       // Додаємо спостерігач для оновлення GUI
       installer.addObserver(new InstallationObserver() {

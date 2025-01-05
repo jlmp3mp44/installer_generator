@@ -1,6 +1,7 @@
 package org.example.converter;
 
 import java.io.*;
+import org.example.builder.Installer;
 
 public class JarToExeConverter implements Converter {
 
@@ -22,12 +23,16 @@ public class JarToExeConverter implements Converter {
         throw new IOException("Не вдалося створити папку для збереження файлу: " + parentDir.getAbsolutePath());
       }
 
-      // Формування команди для конвертації (можна інтегрувати ліцензійний ключ в параметри)
-      String command = "java -jar C:/Users/klubn/Launch4j/launch4j.jar -dontWrapJar " +
-          inputFilePath + " " + outputFilePath;
+      // Створюємо XML для Launch4j
+      String configFilePath = outputFilePath + ".xml";
+      Installer installer = new Installer.Builder()
+          .addFile(new entities.InputFile(inputFilePath, entities.InputFile.FileType.JAR))
+          .setOutputFile(new entities.OutputFile(outputFilePath, entities.OutputFile.FileType.EXE))
+          .build();
+      installer.exportToXml(configFilePath);
 
-      // Логування ліцензійного ключа (якщо є)
-
+      // Формування команди для Launch4j
+      String command = "java -jar C:/Users/klubn/Launch4j/launch4j.jar " + configFilePath;
 
       // Виконання процесу
       Process process = Runtime.getRuntime().exec(command);
