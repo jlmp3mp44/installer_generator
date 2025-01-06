@@ -1,6 +1,7 @@
 package org.example.Controllers;
 
 import java.io.IOException;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -27,6 +28,14 @@ public class AuthController {
 
   @FXML
   private Button registerButton;
+
+  @FXML
+  private TextField licenseKeyField;
+
+  @FXML
+  private Label statusLabel;
+
+  private boolean isPremiumEnabled = false;
 
   private final ValidationHandler usernameValidator;
   private final ValidationHandler passwordValidator;
@@ -69,7 +78,7 @@ public class AuthController {
   }
 
   @FXML
-  private void handleRegister() {
+  private void handleRegister(ActionEvent event) {
     String username = usernameField.getText();
     String password = passwordField.getText();
 
@@ -78,6 +87,7 @@ public class AuthController {
       usernameValidator.validate("Username", username);
       passwordValidator.validate("Password", password);
 
+      validateLicense(event);
       // Send register request to the server
       String response = client.sendRequest("REGISTER " + username + " " + password);
       if (response.equals("User registered successfully")) {
@@ -92,6 +102,26 @@ public class AuthController {
       showAlert(Alert.AlertType.ERROR, "Error", "An error occurred while processing your request.");
     }
   }
+
+  @FXML
+  private void validateLicense(ActionEvent event) {
+    String enteredLicenseKey = licenseKeyField.getText();
+    boolean isLicenseValid = false;
+    if (enteredLicenseKey != null && !enteredLicenseKey.trim().isEmpty()) {
+      String licenseResponse = client.sendRequest("VALIDATE_LICENSE " + enteredLicenseKey);
+      if ("VALID_LICENSE".equals(licenseResponse)) {
+        isLicenseValid = true;
+        statusLabel.setText("License key is valid! Premium features unlocked.");
+        enablePremiumFeatures();
+      } else if ("INVALID_LICENSE".equals(licenseResponse)) {
+        statusLabel.setText("Invalid license key. Registering without premium features.");
+      } else {
+        statusLabel.setText("Error validating license: " + licenseResponse);
+      }
+    }
+  }
+
+
 
   private void showAlert(Alert.AlertType alertType, String title, String content) {
     Alert alert = new Alert(alertType);
@@ -111,5 +141,10 @@ public class AuthController {
       e.printStackTrace();
       showAlert(Alert.AlertType.ERROR, "Navigation Error", "Failed to load welcome page.");
     }
+  }
+
+  private void enablePremiumFeatures() {
+    isPremiumEnabled = true;
+    System.out.println("Premium features enabled.");
   }
 }

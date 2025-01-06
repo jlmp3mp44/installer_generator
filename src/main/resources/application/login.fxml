@@ -10,6 +10,8 @@
 
   <Label text="Login" style="-fx-font-size: 24px; -fx-text-fill: white;" wrapText="true"/>
 
+  <Label fx:id="statusLabel" text="Status: Waiting..." />
+
   <Label text="Enter your username, password, and license key to log in."
     style="-fx-font-size: 16px; -fx-text-fill: white;" wrapText="true"/>
 

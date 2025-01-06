@@ -3,6 +3,7 @@ package org.example.Controllers;
 import entities.ConversionSettings;
 import entities.InputFile;
 import entities.OutputFile;
+import javafx.scene.control.CheckBox;
 import javafx.stage.DirectoryChooser;
 import org.example.server.Client;
 import org.example.validation.DirectoryExistsHandler;
@@ -55,6 +56,10 @@ public class PyConverterController {
 
   @FXML
   private TextField outputFileName;
+
+  @FXML
+  private CheckBox enableEncryptionCheckBox; // Додано чекбокс для вибору шифрування
+
 
   private Client client;
 
@@ -114,6 +119,7 @@ public class PyConverterController {
       if (outputFileName.getText() == null || outputFileName.getText().trim().isEmpty()) {
         throw new IllegalArgumentException("Output file name cannot be empty.");
       }
+
 
       // Підготовка до конвертації
       String pyFile = pyFilePath.getText();

@@ -82,7 +82,7 @@ public class Server {
             break;
           case "VALIDATE_LICENSE":
             if (parts.length == 2) {
-              return validateLicenseKey(parts[1]);
+              return isValidLicenseKey(parts[1]);
             }
             break;
           case "SAVE_FILE":
@@ -110,15 +110,23 @@ public class Server {
       }
     }
 
-    private String validateLicenseKey(String licenseKey) throws SQLException {
-      String query = "SELECT * FROM license_keys WHERE license_key = ?";
-      try (PreparedStatement stmt = connection.prepareStatement(query)) {
-        stmt.setString(1, licenseKey);
-        try (ResultSet rs = stmt.executeQuery()) {
-          return rs.next() ? "License valid" : "License invalid";
+    private String isValidLicenseKey(String licenseKey) {
+      String query = "SELECT COUNT(*) FROM license_keys WHERE license_key = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setString(1, licenseKey);
+        try (ResultSet resultSet = statement.executeQuery()) {
+          if (resultSet.next() && resultSet.getInt(1) > 0) {
+            return "VALID_LICENSE";
+          }
         }
+      } catch (SQLException e) {
+        e.printStackTrace();
+        return "ERROR: " + e.getMessage();
       }
+      return "INVALID_LICENSE";
     }
+
+
 
     private String registerUser(String username, String password) throws SQLException {
       String query = "INSERT INTO users (username, password) VALUES (?, ?)";

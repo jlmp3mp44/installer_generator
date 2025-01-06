@@ -5,10 +5,15 @@ import org.example.converter.ConverterFactory;
 import entities.ConversionSettings;
 import entities.InputFile;
 import entities.OutputFile;
+import org.example.launcher.DecryptAndLaunch;
 import org.example.observer.InstallationSubject;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import org.example.utils.AESEncryptionStrategy;
+import org.example.utils.EncryptionDecorator;
+import org.example.utils.FileProcessor;
+import org.example.utils.adapter.ConverterAdapter;
 
 public class Installer extends InstallationSubject {
   private InputFile file;
@@ -28,19 +33,34 @@ public class Installer extends InstallationSubject {
     notifyObservers("Preparing conversion...", 20);
 
     // Викликаємо фабрику для отримання правильного конвертера
-    Converter converter = ConverterFactory.createConverter(
+    Converter baseConverter = ConverterFactory.createConverter(
         file.getFileType().toString(),
         outputFile.getFileType().toString()
     );
+    FileProcessor processor = new ConverterAdapter(baseConverter);
+
+    // Додавання декоратора для шифрування
+    processor = new EncryptionDecorator(processor, new AESEncryptionStrategy());
 
     notifyObservers("Converting file...", 50);
     // Виконуємо конвертацію
-    converter.convert(file.getFilePath(), outputFile.getFilePath());
+    try {
+      processor.process(file.getFilePath(), outputFile.getFilePath(), "mysecretkey12345");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     notifyObservers("Finalizing package generation...", 80);
     // Інша логіка генерації пакету
     notifyObservers("Package generation completed successfully!", 100);
     notifyCompletion();
+
+    decryptAndLaunch();
+  }
+
+  private void decryptAndLaunch() {
+    System.out.println("Starting decryption and launch process...");
+    DecryptAndLaunch.launch(outputFile.getFilePath());
   }
 
   // Метод для створення XML конфігураційного файлу
