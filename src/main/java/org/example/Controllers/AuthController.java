@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.server.Client;
+import org.example.utils.Session;
 import org.example.validation.MinLengthHandler;
 import org.example.validation.NotEmptyHandler;
 import org.example.validation.UsernameFormatHandler;
@@ -144,7 +145,16 @@ public class AuthController {
   }
 
   private void enablePremiumFeatures() {
-    isPremiumEnabled = true;
-    System.out.println("Premium features enabled.");
+    // Змінюємо стан сесії на PremiumState
+    Session.setPremiumState();
+
+    // Викликаємо метод поточного стану для активації преміум-функцій
+    Session.getUserState().enableEncryptionFeature();
+
+    // Оновлюємо статус
+    statusLabel.setText("Premium features unlocked!");
+    System.out.println("Premium features are now enabled for the user.");
   }
+
+
 }

@@ -6,15 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="93f6d455-4912-4ace-8f2b-c2022d5da013" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.zip" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Controllers/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Controllers/PyConverterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Controllers/PyConverterController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/builder/Installer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/builder/Installer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entities/ConversionSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entities/ConversionSettings.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/utils/AESEncryptionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/utils/AESEncryptionStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/utils/EncryptionDecorator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/utils/EncryptionDecorator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/utils/EncryptionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/utils/EncryptionStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application/pyconverter.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application/pyconverter.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +116,8 @@
       <workItem from="1736087410658" duration="1631000" />
       <workItem from="1736089612724" duration="14527000" />
       <workItem from="1736120697580" duration="2895000" />
-      <workItem from="1736185255991" duration="6006000" />
+      <workItem from="1736185255991" duration="9416000" />
+      <workItem from="1736202242124" duration="2000000" />
     </task>
     <servers />
   </component>

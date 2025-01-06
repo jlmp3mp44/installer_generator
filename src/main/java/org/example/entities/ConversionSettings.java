@@ -4,7 +4,15 @@ public class ConversionSettings {
   private boolean addShortcut;
   private String installPath;
   private String licenseKey;
+  private boolean enableEncryption;
 
+  public boolean isEnableEncryption() {
+    return enableEncryption;
+  }
+
+  public void setEnableEncryption(boolean enableEncryption) {
+    this.enableEncryption = enableEncryption;
+  }
 
   public boolean isAddShortcut() {
     return addShortcut;

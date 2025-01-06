@@ -39,23 +39,26 @@ public class Installer extends InstallationSubject {
     );
     FileProcessor processor = new ConverterAdapter(baseConverter);
 
-    // Додавання декоратора для шифрування
-    processor = new EncryptionDecorator(processor, new AESEncryptionStrategy());
+    // Додаємо шифрування тільки якщо увімкнено в налаштуваннях
+    if (settings.isEnableEncryption()) {
+      processor = new EncryptionDecorator(processor, new AESEncryptionStrategy());
+    }
 
     notifyObservers("Converting file...", 50);
     // Виконуємо конвертацію
     try {
       processor.process(file.getFilePath(), outputFile.getFilePath(), "mysecretkey12345");
+      notifyObservers("Finalizing package generation...", 80);
+      // Інша логіка генерації пакету
+      notifyObservers("Package generation completed successfully!", 100);
+      notifyCompletion();
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-    notifyObservers("Finalizing package generation...", 80);
-    // Інша логіка генерації пакету
-    notifyObservers("Package generation completed successfully!", 100);
-    notifyCompletion();
-
-    decryptAndLaunch();
+    if (settings.isEnableEncryption()) {
+      decryptAndLaunch();
+    }
   }
 
   private void decryptAndLaunch() {
@@ -137,9 +140,7 @@ public class Installer extends InstallationSubject {
     }
 
     public Installer build() {
-      if (file == null || outputFile == null) {
-        throw new IllegalStateException("All fields must be set before building.");
-      }
+
       return new Installer(file, settings, outputFile);
     }
   }

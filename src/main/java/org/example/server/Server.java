@@ -128,6 +128,7 @@ public class Server {
 
 
 
+
     private String registerUser(String username, String password) throws SQLException {
       String query = "INSERT INTO users (username, password) VALUES (?, ?)";
       try (PreparedStatement stmt = connection.prepareStatement(query)) {

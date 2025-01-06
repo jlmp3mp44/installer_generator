@@ -3,9 +3,11 @@ package org.example.Controllers;
 import entities.ConversionSettings;
 import entities.InputFile;
 import entities.OutputFile;
+import javafx.concurrent.Task;
 import javafx.scene.control.CheckBox;
 import javafx.stage.DirectoryChooser;
 import org.example.server.Client;
+import org.example.utils.Session;
 import org.example.validation.DirectoryExistsHandler;
 import org.example.validation.FileExistsHandler;
 import org.example.validation.FileFormatHandler;
@@ -83,6 +85,16 @@ public class PyConverterController {
   }
 
   @FXML
+  public void initialize() {
+    // Налаштовуємо GUI відповідно до поточного стану
+    if (Session.getUserState().isPremium()) {
+      enableEncryptionCheckBox.setDisable(false);
+    } else {
+      enableEncryptionCheckBox.setDisable(true);
+    }
+  }
+
+  @FXML
   private void browsePyFile(ActionEvent event) {
     FileChooser fileChooser = new FileChooser();
     fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Python Files", "*.py"));
@@ -109,8 +121,11 @@ public class PyConverterController {
 
   @FXML
   private void handleConvert(ActionEvent event) {
+    boolean encryptionEnabled = enableEncryptionCheckBox.isSelected();
+
     // Зробити кнопку недоступною
     convertButton.setDisable(true);
+    statusLabel.setText("Initializing conversion...");
 
     try {
       // Валідація полів
@@ -120,85 +135,88 @@ public class PyConverterController {
         throw new IllegalArgumentException("Output file name cannot be empty.");
       }
 
-
       // Підготовка до конвертації
       String pyFile = pyFilePath.getText();
-      String saveDirectory = savePath.getText(); // Директорія збереження
-      String fileName = outputFileName.getText().trim(); // Ім'я файлу без розширення
-      String format = outputFormat.getValue(); // Обраний формат
+      String saveDirectory = savePath.getText();
+      String fileName = outputFileName.getText().trim();
+      String format = outputFormat.getValue();
 
       if (format == null || format.isEmpty()) {
         throw new IllegalArgumentException("Output format must be selected.");
       }
 
-      // Формуємо шлях до файлу з розширенням
       String fileExtension = format.equalsIgnoreCase("EXE") ? ".exe" : ".msi";
-      String outputFilePath = saveDirectory;
+      String outputFilePath = saveDirectory + File.separator + fileName + fileExtension;
 
-      // Перевіряємо, чи директорія існує
       File saveDir = new File(saveDirectory);
       if (!saveDir.exists() || !saveDir.isDirectory()) {
         throw new IllegalArgumentException("Save path must be a valid directory.");
       }
 
-      System.out.println("Converting...");
-      System.out.println("Python File: " + pyFile);
-      System.out.println("Save Directory: " + saveDirectory);
-      System.out.println("Output File: " + outputFilePath);
-
-      // Створюємо InputFile, OutputFile та ConversionSettings
       InputFile inputFile = new InputFile(pyFile, InputFile.FileType.PY);
-      OutputFile outputFile = new OutputFile(outputFilePath + File.separator + fileName + fileExtension, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
+      OutputFile outputFile = new OutputFile(outputFilePath, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
       ConversionSettings settings = new ConversionSettings();
-      settings.setLicenseKey(licenseKey.getText());
+      settings.setEnableEncryption(encryptionEnabled);
       settings.setAddShortcut(true);
       settings.setInstallPath(saveDirectory);
 
-      // Використання Builder
       Installer installer = new Installer.Builder()
           .addFile(inputFile)
           .setConversionSettings(settings)
           .setOutputFile(outputFile)
           .build();
 
-
-      String saveRequest = String.format("SAVE_FILE %d %s %s %s %s %s",
-          1, // user_id, замініть на реального користувача
-          inputFile.getFilePath(),
-          inputFile.getFileType().name(),
-          outputFile.getFilePath(),
-          outputFile.getFileType().name(),
-          outputFile.getIcon() != null ? outputFile.getIcon() : "NULL");
-
-      String response = client.sendRequest(saveRequest);
-
-      // Додаємо спостерігач для оновлення GUI
-      installer.addObserver(new InstallationObserver() {
+      // Використання Task для асинхронного виконання
+      Task<Void> conversionTask = new Task<>() {
         @Override
-        public void onProgressUpdate(String message, int progressPercentage) {
-          Platform.runLater(() -> {
-            statusLabel.setText(message);
-            if (progressPercentage >= 0) {
-              progressBar.setProgress(progressPercentage / 100.0);
+        protected Void call() {
+          // Додаємо спостерігач для оновлення прогресу
+          installer.addObserver(new InstallationObserver() {
+            @Override
+            public void onProgressUpdate(String message, int progressPercentage) {
+              updateMessage(message);
+              updateProgress(progressPercentage, 100);
+            }
+
+            @Override
+            public void onCompletion() {
+              updateMessage("Conversion completed successfully!");
             }
           });
-        }
 
-        @Override
-        public void onCompletion() {
-          Platform.runLater(() -> convertButton.setDisable(false));
+          // Виконуємо пакетну генерацію
+          installer.generatePackage();
+          return null;
         }
+      };
+
+      // Оновлення GUI на основі Task
+      conversionTask.messageProperty().addListener((observable, oldValue, newValue) ->
+          Platform.runLater(() -> statusLabel.setText(newValue))
+      );
+
+      progressBar.progressProperty().bind(conversionTask.progressProperty());
+
+      conversionTask.setOnSucceeded(workerStateEvent -> {
+        convertButton.setDisable(false);
+        progressBar.progressProperty().unbind();
+        progressBar.setProgress(1.0);
       });
 
-      // Запуск процесу в окремому потоці
-      new Thread(installer::generatePackage).start();
+      conversionTask.setOnFailed(workerStateEvent -> {
+        convertButton.setDisable(false);
+        statusLabel.setText("Conversion failed: " + conversionTask.getException().getMessage());
+      });
+
+      // Запуск Task в окремому потоці
+      new Thread(conversionTask).start();
 
     } catch (IllegalArgumentException e) {
-      // Відображення повідомлення про помилку
       statusLabel.setText("Validation Error: " + e.getMessage());
-      convertButton.setDisable(false); // Знову зробити кнопку доступною
+      convertButton.setDisable(false);
     }
   }
+
 
 
   @FXML
