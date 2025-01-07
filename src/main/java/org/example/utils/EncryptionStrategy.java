@@ -1,6 +1,6 @@
 package org.example.utils;
 
 public interface EncryptionStrategy {
-  void encrypt(String inputFile, String outputFile, String key) throws Exception;
-  public void decrypt(String inputFile, String outputFile, String key) throws Exception;
+  void encrypt(String outputFile, String key) throws Exception;
+  public void decrypt(String outputFile, String key) throws Exception;
 }

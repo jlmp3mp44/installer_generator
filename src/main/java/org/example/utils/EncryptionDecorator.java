@@ -1,31 +1,34 @@
 package org.example.utils;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.IOException;
 
 public class EncryptionDecorator implements FileProcessor {
-  private final FileProcessor wrapped;
   private final EncryptionStrategy strategy;
 
-  public EncryptionDecorator(FileProcessor wrapped, EncryptionStrategy strategy) {
-    this.wrapped = wrapped;
+  public EncryptionDecorator(EncryptionStrategy strategy) {
     this.strategy = strategy;
   }
 
   @Override
   public void process(String inputFile, String outputFile, String key) throws Exception {
-    // Створення тимчасового файлу
-    Path tempFilePath = Files.createTempFile("temp", ".file");
-    String tempFile = tempFilePath.toString();
-
-    try {
-      // Виконання обробки та шифрування
-      wrapped.process(inputFile, tempFile, key);
-      strategy.encrypt(tempFile, outputFile, key);
-    } finally {
-      // Видалення тимчасового файлу
-      new File(tempFile).delete();
+    // Перевірка існування вхідного файлу
+    File input = new File(inputFile);
+    if (!input.exists() || input.length() == 0) {
+      throw new RuntimeException("Input file is missing or empty: " + inputFile);
     }
+
+    System.out.println("Encrypting file: " + inputFile);
+
+    // Виконання шифрування
+    strategy.encrypt(outputFile, key);
+
+    // Перевірка створення вихідного файлу
+    File output = new File(outputFile);
+    if (!output.exists() || output.length() == 0) {
+      throw new RuntimeException("Encryption failed: Output file is missing or empty: " + outputFile);
+    }
+
+    System.out.println("Encryption completed. Output file: " + outputFile);
   }
 }

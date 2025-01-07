@@ -32,8 +32,8 @@ public class JarToMsiConverter implements Converter {
       installer.exportToWixXml(configFilePath);
 
       // Виконання процесів WiX Toolset
-      String candlePath = "C:\\Program Files (x86)\\WiX Toolset v3.14\\bin\\candle.exe";
-      String lightPath = "C:\\Program Files (x86)\\WiX Toolset v3.14\\bin\\light.exe";
+      String candlePath = "D:\\trpz_courcework\\wix\\bin\\candle.exe";
+      String lightPath = "D:\\trpz_courcework\\wix\\bin\\light.exe";
 
       // Створюємо шлях до файлу .wixobj, вказуючи правильну директорію
       String wixObjFilePath = outputFile.getParent() + File.separator + configFilePath.replace(".wxs", ".wixobj");

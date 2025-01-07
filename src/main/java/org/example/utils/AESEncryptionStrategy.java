@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
 import java.util.Arrays;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -13,54 +12,72 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESEncryptionStrategy implements EncryptionStrategy {
 
   @Override
-  public void encrypt(String inputFile, String outputFile, String key) throws Exception {
+  public void encrypt(String filePath, String key) throws Exception {
     SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "AES");
     Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
     cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
-    File input = new File(inputFile);
-    if (!input.exists() || input.length() == 0) {
-      throw new RuntimeException("Вхідний файл для шифрування не існує або порожній: " + inputFile);
-    }
+    String encryptedFilePath = filePath + ".encrypted";
 
-    try (InputStream is = new FileInputStream(inputFile);
-        OutputStream os = new FileOutputStream(outputFile)) {
-      byte[] buffer = new byte[16];
+    try (InputStream is = new FileInputStream(filePath);
+        OutputStream os = new FileOutputStream(encryptedFilePath)) {
+      byte[] buffer = new byte[1024]; // Використовуємо більший розмір буфера
       int bytesRead;
       while ((bytesRead = is.read(buffer)) != -1) {
-        if (bytesRead < 16) {
-          Arrays.fill(buffer, bytesRead, 16, (byte) 0); // Доповнення
+        byte[] encrypted = cipher.update(buffer, 0, bytesRead);
+        if (encrypted != null) {
+          os.write(encrypted);
         }
-        byte[] encrypted = cipher.doFinal(buffer);
-        os.write(encrypted);
       }
-    } catch (Exception e) {
-      System.err.println("Помилка під час шифрування: " + e.getMessage());
-      throw e;
+      byte[] finalBlock = cipher.doFinal(); // Записуємо фінальний блок
+      if (finalBlock != null) {
+        os.write(finalBlock);
+      }
+    }
+
+    File originalFile = new File(filePath);
+    File encryptedFile = new File(encryptedFilePath);
+
+    if (originalFile.delete() && encryptedFile.renameTo(originalFile)) {
+      System.out.println("Файл успішно зашифровано: " + filePath);
+    } else {
+      throw new RuntimeException("Не вдалося замінити оригінальний файл зашифрованим файлом.");
     }
   }
 
 
   @Override
-  public void decrypt(String inputFile, String outputFile, String key) throws Exception {
+  public void decrypt(String filePath, String key) throws Exception {
     SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "AES");
-    Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding"); // Рекомендується PKCS5Padding
+    Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
     cipher.init(Cipher.DECRYPT_MODE, secretKey);
 
-    try (InputStream is = new FileInputStream(inputFile);
-        OutputStream os = new FileOutputStream(outputFile)) {
-      byte[] buffer = new byte[16]; // Розмір блоку AES
+    String decryptedFilePath = filePath + ".decrypted";
+
+    try (InputStream is = new FileInputStream(filePath);
+        OutputStream os = new FileOutputStream(decryptedFilePath)) {
+      byte[] buffer = new byte[1024]; // Використовуємо більший розмір буфера
       int bytesRead;
       while ((bytesRead = is.read(buffer)) != -1) {
-        byte[] decrypted = cipher.doFinal(Arrays.copyOf(buffer, bytesRead));
-        os.write(decrypted);
+        byte[] decrypted = cipher.update(buffer, 0, bytesRead);
+        if (decrypted != null) {
+          os.write(decrypted);
+        }
       }
-    } catch (Exception e) {
-      System.err.println("Помилка під час розшифрування: " + e.getMessage());
-      throw e;
+      byte[] finalBlock = cipher.doFinal(); // Записуємо фінальний блок
+      if (finalBlock != null) {
+        os.write(finalBlock);
+      }
+    }
+
+    File originalFile = new File(filePath);
+    File decryptedFile = new File(decryptedFilePath);
+
+    if (originalFile.delete() && decryptedFile.renameTo(originalFile)) {
+      System.out.println("Файл успішно розшифровано: " + filePath);
+    } else {
+      throw new RuntimeException("Не вдалося замінити оригінальний файл розшифрованим файлом.");
     }
   }
 
-
 }
-

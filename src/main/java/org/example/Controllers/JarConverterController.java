@@ -38,8 +38,6 @@ public class JarConverterController {
   @FXML
   private TextField savePath;
 
-  @FXML
-  private TextField licenseKey;
 
   @FXML
   private ComboBox<String> outputFormat;
@@ -115,7 +113,6 @@ public class JarConverterController {
       String jarFile = jarFilePath.getText();
       String saveLocation = savePath.getText();
       String format = outputFormat.getValue();
-      String key = licenseKey.getText();
       String desiredFileName = outputFileName.getText();
 
       if (jarFile.isEmpty() || saveLocation.isEmpty() || format == null
@@ -139,7 +136,6 @@ public class JarConverterController {
       OutputFile outputFile = new OutputFile(outputFilePath,
           format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
       ConversionSettings settings = new ConversionSettings();
-      settings.setLicenseKey(key);
       settings.setAddShortcut(true);
       settings.setInstallPath(saveLocation);
 

@@ -39,16 +39,10 @@ public class Installer extends InstallationSubject {
     );
     FileProcessor processor = new ConverterAdapter(baseConverter);
 
-    // Додаємо шифрування тільки якщо увімкнено в налаштуваннях
-    if (settings.isEnableEncryption()) {
-      processor = new EncryptionDecorator(processor, new AESEncryptionStrategy());
-    }
-
     notifyObservers("Converting file...", 50);
-    // Виконуємо конвертацію
+
     try {
       processor.process(file.getFilePath(), outputFile.getFilePath(), "mysecretkey12345");
-      notifyObservers("Finalizing package generation...", 80);
       // Інша логіка генерації пакету
       notifyObservers("Package generation completed successfully!", 100);
       notifyCompletion();
@@ -56,9 +50,18 @@ public class Installer extends InstallationSubject {
       e.printStackTrace();
     }
 
+    // Додаємо шифрування тільки якщо увімкнено в налаштуваннях
     if (settings.isEnableEncryption()) {
+      notifyObservers("Encrypting", 80);
+      FileProcessor encryptionProcessor = new EncryptionDecorator(new AESEncryptionStrategy());
+      try {
+        encryptionProcessor.process(outputFile.getFilePath(), outputFile.getFilePath(), "mysecretkey12345");
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
       decryptAndLaunch();
     }
+
   }
 
   private void decryptAndLaunch() {
@@ -88,10 +91,10 @@ public class Installer extends InstallationSubject {
     return "<launch4jConfig>\n" +
         "  <outfile>" + outputFile.getFilePath() + "</outfile>\n" +
         "  <jar>" + file.getFilePath() + "</jar>\n" +
-        "  <headerType>gui</headerType>\n" + // Додано тип заголовка
+        "  <headerType>console</headerType>\n\n\n" + // Додано тип заголовка
         "  <jre>\n" +
         "    <path>auto</path>\n" + // Шлях до JRE
-        "    <minVersion>1.8.0</minVersion>\n" +
+        "    <minVersion>11.0.0</minVersion>\n\n" +
         "  </jre>\n" +
         "</launch4jConfig>";
   }
@@ -107,7 +110,7 @@ public class Installer extends InstallationSubject {
         "      <Directory Id=\"ProgramFilesFolder\">\n" +
         "        <Directory Id=\"INSTALLDIR\" Name=\"MyApp\">\n" +
         "          <Component Id=\"MainExecutable\" Guid=\"6c091c65-a4be-4ea9-b901-69c60878b1f3\">\n" +
-        "            <File Id=\"EXE_FILE\" Source=\"" + outputFile.getFilePath() + "\"/>\n" +
+        "            <File Id=\"MAIN_FILE\" Source=\"" + file.getFilePath() + "\"/>\n" +
         "          </Component>\n" +
         "        </Directory>\n" +
         "      </Directory>\n" +
@@ -118,6 +121,7 @@ public class Installer extends InstallationSubject {
         "  </Product>\n" +
         "</Wix>";
   }
+
 
   public static class Builder {
     private InputFile file;

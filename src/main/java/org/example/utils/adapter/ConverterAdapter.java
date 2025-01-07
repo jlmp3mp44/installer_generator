@@ -15,6 +15,7 @@ public class ConverterAdapter implements FileProcessor {
   public void process(String inputFile, String outputFile, String key) throws Exception {
     // Адаптер ігнорує ключ, оскільки `Converter` не підтримує шифрування
     converter.convert(inputFile, outputFile);
+
   }
 }
 
