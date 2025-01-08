@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -24,6 +25,7 @@ import org.example.observer.InstallationObserver;
 
 import java.io.File;
 import org.example.server.Client;
+import org.example.utils.Session;
 import org.example.validation.DirectoryExistsHandler;
 import org.example.validation.FileExistsHandler;
 import org.example.validation.FileFormatHandler;
@@ -54,6 +56,9 @@ public class JarConverterController {
   @FXML
   private TextField outputFileName;
 
+  @FXML
+  private CheckBox enableEncryptionCheckBox;
+
   private Client client;
 
   private final ValidationHandler jarFileValidator;
@@ -68,6 +73,16 @@ public class JarConverterController {
     savePathValidator = new NotEmptyHandler();
     savePathValidator.setNext(new DirectoryExistsHandler());
     client =  new Client();
+  }
+
+  @FXML
+  public void initialize() {
+    // Налаштовуємо GUI відповідно до поточного стану
+    if (Session.getUserState().isPremium()) {
+      enableEncryptionCheckBox.setDisable(false);
+    } else {
+      enableEncryptionCheckBox.setDisable(true);
+    }
   }
 
   @FXML
@@ -101,6 +116,7 @@ public class JarConverterController {
   @FXML
   private void handleConvert(ActionEvent event) {
     convertButton.setDisable(true);
+    boolean encryptionEnabled = enableEncryptionCheckBox.isSelected();
 
     try {
       // Валідація полів
@@ -136,6 +152,7 @@ public class JarConverterController {
       OutputFile outputFile = new OutputFile(outputFilePath,
           format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
       ConversionSettings settings = new ConversionSettings();
+      settings.setEnableEncryption(encryptionEnabled);
       settings.setAddShortcut(true);
       settings.setInstallPath(saveLocation);
 

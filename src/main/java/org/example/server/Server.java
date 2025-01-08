@@ -71,9 +71,11 @@ public class Server {
         String[] parts = request.split(" ");
         switch (parts[0]) {
           case "REGISTER":
-            if (parts.length == 3) {
-              return registerUser(parts[1], parts[2]);
-            }
+          // Перевірка наявності параметра `license`
+          if (parts.length == 4) { // username, password, license
+            boolean license = Boolean.parseBoolean(parts[3]); // Конвертуємо в boolean
+            return registerUser(parts[1], parts[2], license);
+          }
             break;
           case "LOGIN":
             if (parts.length == 3) {
@@ -105,10 +107,17 @@ public class Server {
         stmt.setString(1, username);
         stmt.setString(2, password);
         try (ResultSet rs = stmt.executeQuery()) {
-          return rs.next() ? "Login successful" : "Login failed";
+          if (rs.next()) {
+            // Перевірка статусу преміум
+            boolean isPremium = rs.getBoolean("license"); // Перевірка преміум статусу
+            return isPremium ? "Login successful - Premium User" : "Login successful - Regular User";
+          } else {
+            return "Login failed";
+          }
         }
       }
     }
+
 
     private String isValidLicenseKey(String licenseKey) {
       String query = "SELECT COUNT(*) FROM license_keys WHERE license_key = ?";
@@ -129,11 +138,12 @@ public class Server {
 
 
 
-    private String registerUser(String username, String password) throws SQLException {
-      String query = "INSERT INTO users (username, password) VALUES (?, ?)";
+    private String registerUser(String username, String password, boolean license) throws SQLException {
+      String query = "INSERT INTO users (username, password, license) VALUES (?, ?, ?)";
       try (PreparedStatement stmt = connection.prepareStatement(query)) {
         stmt.setString(1, username);
         stmt.setString(2, password);
+        stmt.setBoolean(3, license);
         stmt.executeUpdate();
         return "User registered successfully";
       }
@@ -153,5 +163,19 @@ public class Server {
         return "File saved successfully";
       }
     }
+
+    private boolean isPremiumUser(String username) throws SQLException {
+      String query = "SELECT license FROM users WHERE username = ?";
+      try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        stmt.setString(1, username);
+        try (ResultSet rs = stmt.executeQuery()) {
+          if (rs.next()) {
+            return rs.getBoolean("license");
+          }
+        }
+      }
+      return false;
+    }
+
   }
 }

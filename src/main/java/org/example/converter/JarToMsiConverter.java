@@ -36,10 +36,12 @@ public class JarToMsiConverter implements Converter {
       String lightPath = "D:\\trpz_courcework\\wix\\bin\\light.exe";
 
       // Створюємо шлях до файлу .wixobj, вказуючи правильну директорію
-      String wixObjFilePath = outputFile.getParent() + File.separator + configFilePath.replace(".wxs", ".wixobj");
+     // String wixObjFilePath = outputFile.getParent() + File.separator + configFilePath.replace(".wxs", ".wixobj");
+      String wixObjFilePath = configFilePath.replace(".wxs", ".wixobj");
+
 
       // Виконання процесів WiX Toolset
-      executeCommand(candlePath, configFilePath);
+      executeCommand(candlePath, configFilePath, "-out", wixObjFilePath);
       executeCommand(lightPath, "-out", outputFilePath, wixObjFilePath);
 
       // Перевірка результату
@@ -56,20 +58,23 @@ public class JarToMsiConverter implements Converter {
   }
 
   private void executeCommand(String... command) throws IOException, InterruptedException {
-    ProcessBuilder processBuilder = new ProcessBuilder(command);
-    processBuilder.redirectErrorStream(true); // Перенаправляємо помилки в стандартний потік виводу
+    System.out.println("Executing command: " + String.join(" ", command)); // Додаємо логування команд
 
-    Process process = processBuilder.start(); // Запускаємо процес
+    ProcessBuilder processBuilder = new ProcessBuilder(command);
+    processBuilder.redirectErrorStream(true);
+
+    Process process = processBuilder.start();
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
       String line;
       while ((line = reader.readLine()) != null) {
-        System.out.println(line); // Логуємо вивід процесу
+        System.out.println(line); // Логуємо кожен рядок виводу
       }
     }
-    int exitCode = process.waitFor(); // Очікуємо завершення процесу
+    int exitCode = process.waitFor();
     if (exitCode != 0) {
       throw new IOException("Команда завершилася з кодом помилки: " + exitCode);
     }
   }
+
 
 }

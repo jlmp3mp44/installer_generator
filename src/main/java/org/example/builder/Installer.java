@@ -1,5 +1,6 @@
 package org.example.builder;
 
+import java.io.File;
 import org.example.converter.Converter;
 import org.example.converter.ConverterFactory;
 import entities.ConversionSettings;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import org.example.utils.AESEncryptionStrategy;
 import org.example.utils.EncryptionDecorator;
 import org.example.utils.FileProcessor;
-import org.example.utils.adapter.ConverterAdapter;
 
 public class Installer extends InstallationSubject {
   private InputFile file;
@@ -37,12 +37,13 @@ public class Installer extends InstallationSubject {
         file.getFileType().toString(),
         outputFile.getFileType().toString()
     );
-    FileProcessor processor = new ConverterAdapter(baseConverter);
+    //FileProcessor processor = new ConverterAdapter(baseConverter);
 
     notifyObservers("Converting file...", 50);
 
     try {
-      processor.process(file.getFilePath(), outputFile.getFilePath(), "mysecretkey12345");
+      baseConverter.convert(file.getFilePath(), outputFile.getFilePath());
+      //processor.process(file.getFilePath(), outputFile.getFilePath(), "mysecretkey12345");
       // Інша логіка генерації пакету
       notifyObservers("Package generation completed successfully!", 100);
       notifyCompletion();
@@ -53,13 +54,14 @@ public class Installer extends InstallationSubject {
     // Додаємо шифрування тільки якщо увімкнено в налаштуваннях
     if (settings.isEnableEncryption()) {
       notifyObservers("Encrypting", 80);
-      FileProcessor encryptionProcessor = new EncryptionDecorator(new AESEncryptionStrategy());
+      FileProcessor processor = new EncryptionDecorator(new AESEncryptionStrategy());
       try {
-        encryptionProcessor.process(outputFile.getFilePath(), outputFile.getFilePath(), "mysecretkey12345");
+        processor.process(outputFile.getFilePath(), outputFile.getFilePath(), "mysecretkey12345");
+        notifyObservers("Package encrypting completed successfully!", 100);
       } catch (Exception e) {
         throw new RuntimeException(e);
       }
-      decryptAndLaunch();
+      //decryptAndLaunch();
     }
 
   }
@@ -110,7 +112,7 @@ public class Installer extends InstallationSubject {
         "      <Directory Id=\"ProgramFilesFolder\">\n" +
         "        <Directory Id=\"INSTALLDIR\" Name=\"MyApp\">\n" +
         "          <Component Id=\"MainExecutable\" Guid=\"6c091c65-a4be-4ea9-b901-69c60878b1f3\">\n" +
-        "            <File Id=\"MAIN_FILE\" Source=\"" + file.getFilePath() + "\"/>\n" +
+        "            <File Id=\"MAIN_FILE\" Source=\"" + file.getFilePath().replace("\\", "/") + "\"/>\n" +
         "          </Component>\n" +
         "        </Directory>\n" +
         "      </Directory>\n" +

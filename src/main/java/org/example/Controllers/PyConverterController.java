@@ -166,54 +166,48 @@ public class PyConverterController {
           .setOutputFile(outputFile)
           .build();
 
-      // Використання Task для асинхронного виконання
-      Task<Void> conversionTask = new Task<>() {
-        @Override
-        protected Void call() {
-          // Додаємо спостерігач для оновлення прогресу
-          installer.addObserver(new InstallationObserver() {
-            @Override
-            public void onProgressUpdate(String message, int progressPercentage) {
-              updateMessage(message);
-              updateProgress(progressPercentage, 100);
-            }
+      String saveRequest = String.format("SAVE_FILE %d %s %s %s %s %s",
+          1, // user_id, замініть на реального користувача
+          inputFile.getFilePath(),
+          inputFile.getFileType().name(),
+          outputFile.getFilePath(),
+          outputFile.getFileType().name(),
+          outputFile.getIcon() != null ? outputFile.getIcon() : "NULL");
 
-            @Override
-            public void onCompletion() {
-              updateMessage("Conversion completed successfully!");
+      String response = client.sendRequest(saveRequest);
+
+      if (!response.equals("File saved successfully")) {
+        statusLabel.setText("Error: " + response);
+        convertButton.setDisable(false);
+        return;
+      }
+
+      // Використання Task для асинхронного виконання
+      installer.addObserver(new InstallationObserver() {
+        @Override
+        public void onProgressUpdate(String message, int progressPercentage) {
+          Platform.runLater(() -> {
+            statusLabel.setText(message);
+            if (progressPercentage >= 0) {
+              progressBar.setProgress(progressPercentage / 100.0);
             }
           });
-
-          // Виконуємо пакетну генерацію
-          installer.generatePackage();
-          return null;
         }
-      };
 
-      // Оновлення GUI на основі Task
-      conversionTask.messageProperty().addListener((observable, oldValue, newValue) ->
-          Platform.runLater(() -> statusLabel.setText(newValue))
-      );
-
-      progressBar.progressProperty().bind(conversionTask.progressProperty());
-
-      conversionTask.setOnSucceeded(workerStateEvent -> {
-        convertButton.setDisable(false);
-        progressBar.progressProperty().unbind();
-        progressBar.setProgress(1.0);
+        @Override
+        public void onCompletion() {
+          Platform.runLater(() -> {
+            statusLabel.setText("Conversion completed successfully!");
+            convertButton.setDisable(false);
+          });
+        }
       });
 
-      conversionTask.setOnFailed(workerStateEvent -> {
-        convertButton.setDisable(false);
-        statusLabel.setText("Conversion failed: " + conversionTask.getException().getMessage());
-      });
-
-      // Запуск Task в окремому потоці
-      new Thread(conversionTask).start();
-
+      new Thread(installer::generatePackage).start();
     } catch (IllegalArgumentException e) {
+      // Відображення повідомлення про помилку
       statusLabel.setText("Validation Error: " + e.getMessage());
-      convertButton.setDisable(false);
+      convertButton.setDisable(false); // Знову зробити кнопку доступною
     }
   }
 

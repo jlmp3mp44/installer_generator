@@ -52,6 +52,7 @@ public class AuthController {
     client = new Client();
   }
 
+
   @FXML
   private void handleLogin(javafx.event.ActionEvent event) {
     String username = usernameField.getText();
@@ -64,7 +65,8 @@ public class AuthController {
 
       // Send login request to the server
       String response = client.sendRequest("LOGIN " + username + " " + password);
-      if (response.equals("Login successful")) {
+      if (response.equals("Login successful - Premium User")) {
+        enablePremiumFeatures();
         showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
         navigateToWelcome(event);
       } else {
@@ -88,9 +90,9 @@ public class AuthController {
       usernameValidator.validate("Username", username);
       passwordValidator.validate("Password", password);
 
-      validateLicense(event);
+      boolean isPremium = validateLicense(event);
       // Send register request to the server
-      String response = client.sendRequest("REGISTER " + username + " " + password);
+      String response = client.sendRequest("REGISTER " + username + " " + password + " " + isPremium);
       if (response.equals("User registered successfully")) {
         showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "You can now log in.");
       } else {
@@ -105,7 +107,7 @@ public class AuthController {
   }
 
   @FXML
-  private void validateLicense(ActionEvent event) {
+  private boolean validateLicense(ActionEvent event) {
     String enteredLicenseKey = licenseKeyField.getText();
     boolean isLicenseValid = false;
     if (enteredLicenseKey != null && !enteredLicenseKey.trim().isEmpty()) {
@@ -120,6 +122,7 @@ public class AuthController {
         statusLabel.setText("Error validating license: " + licenseResponse);
       }
     }
+    return isLicenseValid;
   }
 
 
