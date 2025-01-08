@@ -1,7 +1,6 @@
-package org.example.utils;
+package org.example.encryption;
 
 import java.io.File;
-import java.io.IOException;
 
 public class EncryptionDecorator implements FileProcessor {
   private final EncryptionStrategy strategy;

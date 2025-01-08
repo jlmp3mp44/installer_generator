@@ -1,4 +1,4 @@
-package org.example.utils;
+package org.example.encryption;
 
 public interface EncryptionStrategy {
   void encrypt(String outputFile, String key) throws Exception;

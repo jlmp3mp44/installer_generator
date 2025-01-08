@@ -1,4 +1,4 @@
-package org.example.utils;
+package org.example.encryption;
 
 public class CompressionDecorator implements FileProcessor {
   private final FileProcessor wrapped;

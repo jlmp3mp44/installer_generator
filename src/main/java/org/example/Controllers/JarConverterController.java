@@ -1,8 +1,6 @@
 package org.example.Controllers;
 
-import entities.ConversionSettings;
-import entities.InputFile;
-import entities.OutputFile;
+
 import java.io.IOException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -21,11 +19,14 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.builder.Installer;
+import org.example.entities.ConversionSettings;
+import org.example.entities.InputFile;
+import org.example.entities.OutputFile;
 import org.example.observer.InstallationObserver;
 
 import java.io.File;
 import org.example.server.Client;
-import org.example.utils.Session;
+import org.example.state.Session;
 import org.example.validation.DirectoryExistsHandler;
 import org.example.validation.FileExistsHandler;
 import org.example.validation.FileFormatHandler;

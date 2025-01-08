@@ -2,6 +2,8 @@ package org.example.converter;
 
 import java.io.*;
 import org.example.builder.Installer;
+import org.example.entities.InputFile;
+import org.example.entities.OutputFile;
 
 public class JarToMsiConverter implements Converter {
 
@@ -26,10 +28,10 @@ public class JarToMsiConverter implements Converter {
       // Створюємо WiX XML конфігураційний файл
       String configFilePath = outputFilePath + ".wxs";
       Installer installer = new Installer.Builder()
-          .addFile(new entities.InputFile(inputFilePath, entities.InputFile.FileType.JAR))
-          .setOutputFile(new entities.OutputFile(outputFilePath, entities.OutputFile.FileType.MSI))
+          .addFile(new InputFile(inputFilePath, InputFile.FileType.JAR))
+          .setOutputFile(new OutputFile(outputFilePath, OutputFile.FileType.MSI))
           .build();
-      installer.exportToWixXml(configFilePath);
+      installer.exportWixXml(configFilePath);
 
       // Виконання процесів WiX Toolset
       String candlePath = "D:\\trpz_courcework\\wix\\bin\\candle.exe";

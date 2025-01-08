@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.server.Client;
-import org.example.utils.Session;
+import org.example.state.Session;
 import org.example.validation.MinLengthHandler;
 import org.example.validation.NotEmptyHandler;
 import org.example.validation.UsernameFormatHandler;
@@ -50,6 +50,7 @@ public class AuthController {
     passwordValidator.setNext(new MinLengthHandler(6));
 
     client = new Client();
+    Session.initializeState(false);
   }
 
 
@@ -66,7 +67,8 @@ public class AuthController {
       // Send login request to the server
       String response = client.sendRequest("LOGIN " + username + " " + password);
       if (response.equals("Login successful - Premium User")) {
-        enablePremiumFeatures();
+        //enablePremiumFeatures();
+        Session.initializeState(true);
         showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
         navigateToWelcome(event);
       } else {
@@ -115,7 +117,8 @@ public class AuthController {
       if ("VALID_LICENSE".equals(licenseResponse)) {
         isLicenseValid = true;
         statusLabel.setText("License key is valid! Premium features unlocked.");
-        enablePremiumFeatures();
+        //enablePremiumFeatures();
+        Session.initializeState(true);
       } else if ("INVALID_LICENSE".equals(licenseResponse)) {
         statusLabel.setText("Invalid license key. Registering without premium features.");
       } else {
@@ -147,7 +150,7 @@ public class AuthController {
     }
   }
 
-  private void enablePremiumFeatures() {
+  /*private void enablePremiumFeatures() {
     // Змінюємо стан сесії на PremiumState
     Session.setPremiumState();
 
@@ -157,7 +160,7 @@ public class AuthController {
     // Оновлюємо статус
     statusLabel.setText("Premium features unlocked!");
     System.out.println("Premium features are now enabled for the user.");
-  }
+  }*/
 
 
 }

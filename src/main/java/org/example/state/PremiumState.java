@@ -5,7 +5,6 @@ import org.example.builder.Installer;
 
 public class PremiumState implements UserState {
 
-
   @Override
   public boolean isPremium() {
     return true; // Преміумний стан

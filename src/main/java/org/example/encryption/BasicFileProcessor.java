@@ -1,4 +1,4 @@
-package org.example.utils;
+package org.example.encryption;
 
 import java.io.File;
 import java.nio.file.Files;

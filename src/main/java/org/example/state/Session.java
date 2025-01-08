@@ -1,4 +1,4 @@
-package org.example.utils;
+package org.example.state;
 
 import org.example.builder.Installer;
 import org.example.state.BasicState;
@@ -18,7 +18,6 @@ public class Session {
 
     userState = new PremiumState();
   }
-
 
   public static void setBasicState() {
     userState = new BasicState();
