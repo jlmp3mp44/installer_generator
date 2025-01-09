@@ -12,24 +12,14 @@ public class JarToMsiConverter implements Converter {
     System.out.println("Конвертація JAR у MSI: " + inputFilePath + " → " + outputFilePath);
 
     try {
-      // Перевірка існування вхідного файлу
-      File inputFile = new File(inputFilePath);
-      if (!inputFile.exists()) {
-        throw new FileNotFoundException("Вхідний файл не знайдено: " + inputFilePath);
-      }
 
-      // Перевірка наявності папки для збереження файлу
       File outputFile = new File(outputFilePath);
-      File parentDir = outputFile.getParentFile();
-      if (!parentDir.exists() && !parentDir.mkdirs()) {
-        throw new IOException("Не вдалося створити папку для збереження файлу: " + parentDir.getAbsolutePath());
-      }
 
       // Створюємо WiX XML конфігураційний файл
       String configFilePath = outputFilePath + ".wxs";
       Installer installer = new Installer.Builder()
           .addFile(new InputFile(inputFilePath, InputFile.FileType.JAR))
-          .setOutputFile(new OutputFile(outputFilePath, OutputFile.FileType.MSI))
+          .setOutputFile(new OutputFile(outputFilePath, outputFilePath, OutputFile.FileType.MSI))
           .build();
       installer.exportWixXml(configFilePath);
 

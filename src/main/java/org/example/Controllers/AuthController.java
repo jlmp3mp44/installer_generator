@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.example.entities.User;
 import org.example.server.Client;
 import org.example.state.Session;
 import org.example.validation.MinLengthHandler;
@@ -36,19 +37,9 @@ public class AuthController {
   @FXML
   private Label statusLabel;
 
-  private boolean isPremiumEnabled = false;
-
-  private final ValidationHandler usernameValidator;
-  private final ValidationHandler passwordValidator;
   private final Client client;
 
   public AuthController() {
-    usernameValidator = new NotEmptyHandler();
-    usernameValidator.setNext(new UsernameFormatHandler());
-
-    passwordValidator = new NotEmptyHandler();
-    passwordValidator.setNext(new MinLengthHandler(6));
-
     client = new Client();
     Session.initializeState(false);
   }
@@ -60,18 +51,18 @@ public class AuthController {
     String password = passwordField.getText();
 
     try {
-      // Validate fields
-      usernameValidator.validate("Username", username);
-      passwordValidator.validate("Password", password);
-
       // Send login request to the server
       String response = client.sendRequest("LOGIN " + username + " " + password);
       if (response.equals("Login successful - Premium User")) {
-        //enablePremiumFeatures();
         Session.initializeState(true);
         showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
         navigateToWelcome(event);
-      } else {
+      }
+      else if(response.equals("Login successful - Regular User")){
+        showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
+        navigateToWelcome(event);
+      }
+      else {
         showAlert(Alert.AlertType.ERROR, "Login Failed", response);
       }
     } catch (IllegalArgumentException e) {
@@ -87,12 +78,13 @@ public class AuthController {
     String username = usernameField.getText();
     String password = passwordField.getText();
 
+    User user =  new User(username, password);
     try {
       // Validate fields
-      usernameValidator.validate("Username", username);
-      passwordValidator.validate("Password", password);
+     user.validate();
 
       boolean isPremium = validateLicense(event);
+      user.setLicense(true);
       // Send register request to the server
       String response = client.sendRequest("REGISTER " + username + " " + password + " " + isPremium);
       if (response.equals("User registered successfully")) {
@@ -149,18 +141,5 @@ public class AuthController {
       showAlert(Alert.AlertType.ERROR, "Navigation Error", "Failed to load welcome page.");
     }
   }
-
-  /*private void enablePremiumFeatures() {
-    // Змінюємо стан сесії на PremiumState
-    Session.setPremiumState();
-
-    // Викликаємо метод поточного стану для активації преміум-функцій
-    Session.getUserState().enableEncryptionFeature();
-
-    // Оновлюємо статус
-    statusLabel.setText("Premium features unlocked!");
-    System.out.println("Premium features are now enabled for the user.");
-  }*/
-
 
 }

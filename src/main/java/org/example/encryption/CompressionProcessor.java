@@ -1,9 +1,9 @@
 package org.example.encryption;
 
-public class CompressionDecorator implements FileProcessor {
+public class CompressionProcessor implements FileProcessor {
   private final FileProcessor wrapped;
 
-  public CompressionDecorator(FileProcessor wrapped) {
+  public CompressionProcessor(FileProcessor wrapped) {
     this.wrapped = wrapped;
   }
 

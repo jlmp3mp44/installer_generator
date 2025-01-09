@@ -2,16 +2,15 @@ package org.example.encryption;
 
 import java.io.File;
 
-public class EncryptionDecorator implements FileProcessor {
+public class EncryptionProcessor implements FileProcessor {
   private final EncryptionStrategy strategy;
 
-  public EncryptionDecorator(EncryptionStrategy strategy) {
+  public EncryptionProcessor(EncryptionStrategy strategy) {
     this.strategy = strategy;
   }
 
   @Override
   public void process(String inputFile, String outputFile, String key) throws Exception {
-    // Перевірка існування вхідного файлу
     File input = new File(inputFile);
     if (!input.exists() || input.length() == 0) {
       throw new RuntimeException("Input file is missing or empty: " + inputFile);

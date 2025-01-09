@@ -13,23 +13,12 @@ public class JarToExeConverter implements Converter {
 
     try {
 
-      File inputFile = new File(inputFilePath);
-      if (!inputFile.exists()) {
-        throw new FileNotFoundException("Вхідний файл не знайдено: " + inputFilePath);
-      }
-
-
       File outputFile = new File(outputFilePath);
-      File parentDir = outputFile.getParentFile();
-      if (!parentDir.exists() && !parentDir.mkdirs()) {
-        throw new IOException("Не вдалося створити папку для збереження файлу: " + parentDir.getAbsolutePath());
-      }
-
 
       String configFilePath = outputFilePath + ".xml";
       Installer installer = new Installer.Builder()
           .addFile(new InputFile(inputFilePath, InputFile.FileType.JAR))
-          .setOutputFile(new OutputFile(outputFilePath, OutputFile.FileType.EXE))
+          .setOutputFile(new OutputFile(outputFilePath, outputFilePath, OutputFile.FileType.EXE))
           .build();
       installer.exportXml(configFilePath);
 

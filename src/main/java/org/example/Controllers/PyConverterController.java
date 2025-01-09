@@ -42,9 +42,6 @@ public class PyConverterController {
   private TextField savePath;
 
   @FXML
-  private TextField licenseKey;
-
-  @FXML
   private ComboBox<String> outputFormat;
 
   @FXML
@@ -60,28 +57,16 @@ public class PyConverterController {
   private TextField outputFileName;
 
   @FXML
-  private CheckBox enableEncryptionCheckBox; // Додано чекбокс для вибору шифрування
+  private CheckBox enableEncryptionCheckBox;
 
 
   private Client client;
 
-  // Ланцюжки валідації для різних полів
-  private final ValidationHandler pyFileValidator;
-  private final ValidationHandler savePathValidator;
-  //private final ValidationHandler licenseKeyValidator;
 
   public PyConverterController() {
-    // Створення ланцюжків валідації
-    pyFileValidator = new NotEmptyHandler();
-    pyFileValidator.setNext(new FileFormatHandler(".py"))
-        .setNext(new FileExistsHandler());
-
-    savePathValidator = new NotEmptyHandler();
-    savePathValidator.setNext(new DirectoryExistsHandler());
 
     client =  new Client();
-   // licenseKeyValidator = new NotEmptyHandler();
-   // licenseKeyValidator.setNext(new LicenseKeyFormatHandler());
+
   }
 
   @FXML
@@ -128,9 +113,7 @@ public class PyConverterController {
     statusLabel.setText("Initializing conversion...");
 
     try {
-      // Валідація полів
-      pyFileValidator.validate("Python File Path", pyFilePath.getText());
-      savePathValidator.validate("Save Path", savePath.getText());
+
       if (outputFileName.getText() == null || outputFileName.getText().trim().isEmpty()) {
         throw new IllegalArgumentException("Output file name cannot be empty.");
       }
@@ -140,30 +123,43 @@ public class PyConverterController {
       String saveDirectory = savePath.getText();
       String fileName = outputFileName.getText().trim();
       String format = outputFormat.getValue();
-
-      if (format == null || format.isEmpty()) {
-        throw new IllegalArgumentException("Output format must be selected.");
-      }
-
       String fileExtension = format.equalsIgnoreCase("EXE") ? ".exe" : ".msi";
       String outputFilePath = saveDirectory + File.separator + fileName + fileExtension;
 
-      File saveDir = new File(saveDirectory);
-      if (!saveDir.exists() || !saveDir.isDirectory()) {
-        throw new IllegalArgumentException("Save path must be a valid directory.");
-      }
+      InputFile inputFile = new InputFile(pyFile, InputFile.FileType.JAR);
+      inputFile.validate();
+      OutputFile outputFile = new OutputFile(saveDirectory, fileName, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
+      outputFile.validate();
 
-      InputFile inputFile = new InputFile(pyFile, InputFile.FileType.PY);
-      OutputFile outputFile = new OutputFile(outputFilePath, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
+
       ConversionSettings settings = new ConversionSettings();
       settings.setEnableEncryption(encryptionEnabled);
       settings.setAddShortcut(true);
       settings.setInstallPath(saveDirectory);
-
+      outputFile = new OutputFile(outputFilePath, fileName, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
       Installer installer = new Installer.Builder()
           .addFile(inputFile)
           .setConversionSettings(settings)
           .setOutputFile(outputFile)
+          .addObserver(new InstallationObserver() {
+            @Override
+            public void onProgressUpdate(String message, int progressPercentage) {
+              Platform.runLater(() -> {
+                statusLabel.setText(message);
+                if (progressPercentage >= 0) {
+                  progressBar.setProgress(progressPercentage / 100.0);
+                }
+              });
+            }
+
+            @Override
+            public void onCompletion() {
+              Platform.runLater(() -> {
+                statusLabel.setText("Conversion completed successfully!");
+                convertButton.setDisable(false);
+              });
+            }
+          })
           .build();
 
       String saveRequest = String.format("SAVE_FILE %d %s %s %s %s %s",
@@ -182,27 +178,6 @@ public class PyConverterController {
         return;
       }
 
-      // Використання Task для асинхронного виконання
-      installer.addObserver(new InstallationObserver() {
-        @Override
-        public void onProgressUpdate(String message, int progressPercentage) {
-          Platform.runLater(() -> {
-            statusLabel.setText(message);
-            if (progressPercentage >= 0) {
-              progressBar.setProgress(progressPercentage / 100.0);
-            }
-          });
-        }
-
-        @Override
-        public void onCompletion() {
-          Platform.runLater(() -> {
-            statusLabel.setText("Conversion completed successfully!");
-            convertButton.setDisable(false);
-          });
-        }
-      });
-
       new Thread(installer::generatePackage).start();
     } catch (IllegalArgumentException e) {
       // Відображення повідомлення про помилку
@@ -210,8 +185,6 @@ public class PyConverterController {
       convertButton.setDisable(false); // Знову зробити кнопку доступною
     }
   }
-
-
 
   @FXML
   private void goToWelcome(ActionEvent event) {

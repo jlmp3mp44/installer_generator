@@ -1,16 +1,29 @@
 package org.example.entities;
 
 import java.io.File;
+import org.example.validation.FileExistsHandler;
+import org.example.validation.FileFormatHandler;
+import org.example.validation.NotEmptyHandler;
+import org.example.validation.ValidationHandler;
 
-// InputFile.java
 public class InputFile {
   private String filePath;
   private FileType fileType;
+  private ValidationHandler fileValidator;
+
 
   public InputFile(String filePath, FileType fileType) {
     this.filePath = filePath;
     this.fileType = fileType;
+    initializeValidator();
   }
+
+  private void initializeValidator() {
+    fileValidator = new NotEmptyHandler()
+        .setNext(new FileFormatHandler("." + fileType.toString().toLowerCase()))
+        .setNext(new FileExistsHandler());
+  }
+
 
   public String getFilePath() {
     return filePath;
@@ -20,10 +33,9 @@ public class InputFile {
     return fileType;
   }
 
-  public boolean validate() {
-    // Validate file existence and format
-    File file = new File(filePath);
-    return file.exists() && fileType != null;
+  public void validate() {
+    fileValidator.validate(fileType + "File Path", filePath);
+
   }
 
   public enum FileType {

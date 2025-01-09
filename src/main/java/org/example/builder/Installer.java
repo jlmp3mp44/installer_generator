@@ -1,5 +1,7 @@
 package org.example.builder;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.example.converter.Converter;
 import org.example.converter.ConverterFactory;
 
@@ -9,12 +11,10 @@ import org.example.entities.OutputFile;
 import org.example.file_generator.WixFileGenerator;
 import org.example.file_generator.XmlFileGenerator;
 import org.example.launcher.DecryptAndLaunch;
+import org.example.observer.InstallationObserver;
 import org.example.observer.InstallationSubject;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import org.example.encryption.AESEncryptionStrategy;
-import org.example.encryption.EncryptionDecorator;
+import org.example.encryption.EncryptionProcessor;
 import org.example.encryption.FileProcessor;
 
 public class Installer extends InstallationSubject {
@@ -51,7 +51,7 @@ public class Installer extends InstallationSubject {
 
     if (settings.isEnableEncryption()) {
       notifyObservers("Encrypting", 80);
-      FileProcessor processor = new EncryptionDecorator(new AESEncryptionStrategy());
+      FileProcessor processor = new EncryptionProcessor(new AESEncryptionStrategy());
       try {
         processor.process(outputFile.getFilePath(), outputFile.getFilePath(), "mysecretkey12345");
         notifyObservers("Package encrypting completed successfully!", 100);
@@ -83,6 +83,7 @@ public class Installer extends InstallationSubject {
     private InputFile file;
     private ConversionSettings settings;
     private OutputFile outputFile;
+    private List<InstallationObserver> observers = new ArrayList<>();
 
     public Builder addFile(InputFile file) {
       this.file = file;
@@ -99,9 +100,16 @@ public class Installer extends InstallationSubject {
       return this;
     }
 
+    public Builder addObserver(InstallationObserver observer) {
+      observers.add(observer);
+      return this;
+    }
     public Installer build() {
-
-      return new Installer(file, settings, outputFile);
+      Installer installer = new Installer(file, settings, outputFile);
+      for (InstallationObserver observer : observers) {
+        installer.addObserver(observer);
+      }
+      return installer;
     }
   }
 }

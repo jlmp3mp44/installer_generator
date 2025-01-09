@@ -1,14 +1,38 @@
 package org.example.entities;
 
+import org.example.validation.DirectoryExistsHandler;
+import org.example.validation.FileExistsHandler;
+import org.example.validation.FileFormatHandler;
+import org.example.validation.NotEmptyHandler;
+import org.example.validation.ValidationHandler;
+
 public class OutputFile {
   private String filePath;
+  private String fileName;
   private FileType fileType;
   private String icon;
-  private boolean compressed;
+  private ValidationHandler pathValidator;
+  private ValidationHandler fileNameValidator;
 
-  public OutputFile(String filePath, FileType fileType) {
+  public OutputFile(String filePath, String fileName,  FileType fileType) {
     this.filePath = filePath;
+    this.fileName = fileName;
     this.fileType = fileType;
+    initializeValidator();
+  }
+
+  private void initializeValidator() {
+    pathValidator =  new NotEmptyHandler().
+        setNext(new DirectoryExistsHandler());
+    fileNameValidator =  new NotEmptyHandler();
+
+  }
+
+  public void validate() {
+    pathValidator.validate("Save Path", filePath);
+    fileNameValidator.validate("Save file name", fileName);
+
+
   }
 
   public String getFilePath() {
@@ -27,13 +51,6 @@ public class OutputFile {
     return icon;
   }
 
-  public void setCompressed(boolean compressed) {
-    this.compressed = compressed;
-  }
-
-  public boolean isCompressed() {
-    return compressed;
-  }
 
   public enum FileType {
     EXE, MSI

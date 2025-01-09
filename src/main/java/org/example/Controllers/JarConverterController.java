@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import org.example.builder.Installer;
 import org.example.entities.ConversionSettings;
 import org.example.entities.InputFile;
+import org.example.entities.InputFile.FileType;
 import org.example.entities.OutputFile;
 import org.example.observer.InstallationObserver;
 
@@ -62,17 +63,9 @@ public class JarConverterController {
 
   private Client client;
 
-  private final ValidationHandler jarFileValidator;
-  private final ValidationHandler savePathValidator;
 
   public JarConverterController(){
 
-    jarFileValidator = new NotEmptyHandler();
-    jarFileValidator.setNext(new FileFormatHandler(".jar"))
-        .setNext(new FileExistsHandler());
-
-    savePathValidator = new NotEmptyHandler();
-    savePathValidator.setNext(new DirectoryExistsHandler());
     client =  new Client();
   }
 
@@ -119,25 +112,19 @@ public class JarConverterController {
     convertButton.setDisable(true);
     boolean encryptionEnabled = enableEncryptionCheckBox.isSelected();
 
+    String jarFile = jarFilePath.getText();
+    String saveLocation = savePath.getText();
+    String format = outputFormat.getValue();
+    String desiredFileName = outputFileName.getText();
+
+    String fileExtension = format.equalsIgnoreCase("EXE") ? ".exe" : ".msi";
+    String outputFilePath = saveLocation + File.separator + desiredFileName + fileExtension;
+
+    InputFile inputFile = new InputFile(jarFilePath.getText(), InputFile.FileType.JAR);
+    OutputFile outputFile =  new OutputFile(saveLocation, desiredFileName, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
     try {
-      // Валідація полів
-      jarFileValidator.validate("Jar File Path", jarFilePath.getText());
-      savePathValidator.validate("Save Path", savePath.getText());
-      if (outputFileName.getText() == null || outputFileName.getText().trim().isEmpty()) {
-        throw new IllegalArgumentException("Output file name cannot be empty.");
-      }
-
-      String jarFile = jarFilePath.getText();
-      String saveLocation = savePath.getText();
-      String format = outputFormat.getValue();
-      String desiredFileName = outputFileName.getText();
-
-      if (jarFile.isEmpty() || saveLocation.isEmpty() || format == null
-          || desiredFileName.isEmpty()) {
-        System.out.println("Please fill in all required fields.");
-        convertButton.setDisable(false);
-        return;
-      }
+      inputFile.validate();
+      outputFile.validate();
 
       System.out.println("Converting...");
       System.out.println("JAR File: " + jarFile);
@@ -145,22 +132,35 @@ public class JarConverterController {
       System.out.println("Output Format: " + format);
       System.out.println("Desired File Name: " + desiredFileName);
 
-      // Додаємо розширення до імені файлу
-      String fileExtension = format.equalsIgnoreCase("EXE") ? ".exe" : ".msi";
-      String outputFilePath = saveLocation + File.separator + desiredFileName + fileExtension;
 
-      InputFile inputFile = new InputFile(jarFile, InputFile.FileType.JAR);
-      OutputFile outputFile = new OutputFile(outputFilePath,
-          format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
       ConversionSettings settings = new ConversionSettings();
       settings.setEnableEncryption(encryptionEnabled);
       settings.setAddShortcut(true);
       settings.setInstallPath(saveLocation);
-
+      outputFile =  new OutputFile(outputFilePath, desiredFileName, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
       Installer installer = new Installer.Builder()
           .addFile(inputFile)
           .setConversionSettings(settings)
           .setOutputFile(outputFile)
+          .addObserver(new InstallationObserver() {
+            @Override
+            public void onProgressUpdate(String message, int progressPercentage) {
+              Platform.runLater(() -> {
+                statusLabel.setText(message);
+                if (progressPercentage >= 0) {
+                  progressBar.setProgress(progressPercentage / 100.0);
+                }
+              });
+            }
+
+            @Override
+            public void onCompletion() {
+              Platform.runLater(() -> {
+                statusLabel.setText("Conversion completed successfully!");
+                convertButton.setDisable(false);
+              });
+            }
+          })
           .build();
 
       // Відправка запиту на сервер
@@ -174,46 +174,26 @@ public class JarConverterController {
 
       String response = client.sendRequest(saveRequest);
 
-      // Обробка відповіді сервера
       if (!response.equals("File saved successfully")) {
         statusLabel.setText("Error: " + response);
         convertButton.setDisable(false);
         return;
       }
 
-      installer.addObserver(new InstallationObserver() {
-        @Override
-        public void onProgressUpdate(String message, int progressPercentage) {
-          Platform.runLater(() -> {
-            statusLabel.setText(message);
-            if (progressPercentage >= 0) {
-              progressBar.setProgress(progressPercentage / 100.0);
-            }
-          });
-        }
-
-        @Override
-        public void onCompletion() {
-          Platform.runLater(() -> {
-            statusLabel.setText("Conversion completed successfully!");
-            convertButton.setDisable(false);
-          });
-        }
-      });
-
       new Thread(installer::generatePackage).start();
     } catch (IllegalArgumentException e) {
-      // Відображення повідомлення про помилку
-      statusLabel.setText("Validation Error: " + e.getMessage());
-      convertButton.setDisable(false); // Знову зробити кнопку доступною
+      Platform.runLater(() -> {
+        statusLabel.setText("Validation Error: " + e.getMessage());
+        convertButton.setDisable(false);
+      });
     }
+
   }
 
 
   @FXML
   private void goToWelcome(ActionEvent event) {
-    // Логіка для переходу на головну сторінку
-    // Це може бути, наприклад, завантаження іншої сцени, або очищення поточного вікна
+
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/welcome.fxml"));
     Parent root = null;
     try {
