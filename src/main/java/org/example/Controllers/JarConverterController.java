@@ -71,12 +71,7 @@ public class JarConverterController {
 
   @FXML
   public void initialize() {
-    // Налаштовуємо GUI відповідно до поточного стану
-    if (Session.getUserState().isPremium()) {
-      enableEncryptionCheckBox.setDisable(false);
-    } else {
-      enableEncryptionCheckBox.setDisable(true);
-    }
+    Session.getUserState().enableEncryptionFeature(enableEncryptionCheckBox);
   }
 
   @FXML
@@ -163,9 +158,10 @@ public class JarConverterController {
           })
           .build();
 
+      int userId = Session.getUserId();
       // Відправка запиту на сервер
       String saveRequest = String.format("SAVE_FILE %d %s %s %s %s %s",
-          1, // user_id, замініть на реального користувача
+          userId, // user_id, замініть на реального користувача
           inputFile.getFilePath(),
           inputFile.getFileType().name(),
           outputFile.getFilePath(),

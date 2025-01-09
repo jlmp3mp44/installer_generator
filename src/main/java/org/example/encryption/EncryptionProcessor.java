@@ -22,10 +22,10 @@ public class EncryptionProcessor implements FileProcessor {
     strategy.encrypt(outputFile, key);
 
     // Перевірка створення вихідного файлу
-    File output = new File(outputFile);
+   /* File output = new File(outputFile);
     if (!output.exists() || output.length() == 0) {
       throw new RuntimeException("Encryption failed: Output file is missing or empty: " + outputFile);
-    }
+    }*/
 
     System.out.println("Encryption completed. Output file: " + outputFile);
   }

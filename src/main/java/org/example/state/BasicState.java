@@ -1,5 +1,7 @@
 package org.example.state;
 
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.CheckBox;
 import org.example.builder.Installer;
 
 public class BasicState implements UserState {
@@ -10,9 +12,9 @@ public class BasicState implements UserState {
   }
 
   @Override
-  public void enableEncryptionFeature() {
+  public void enableEncryptionFeature(ButtonBase button) {
     System.out.println("Encryption feature is disabled for basic users.");
-    // У GUI можна приховати або відключити опцію шифрування
+    button.setDisable(true);
   }
 
   @Override

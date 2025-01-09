@@ -126,7 +126,7 @@ public class PyConverterController {
       String fileExtension = format.equalsIgnoreCase("EXE") ? ".exe" : ".msi";
       String outputFilePath = saveDirectory + File.separator + fileName + fileExtension;
 
-      InputFile inputFile = new InputFile(pyFile, InputFile.FileType.JAR);
+      InputFile inputFile = new InputFile(pyFile, InputFile.FileType.PY);
       inputFile.validate();
       OutputFile outputFile = new OutputFile(saveDirectory, fileName, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
       outputFile.validate();
@@ -177,7 +177,6 @@ public class PyConverterController {
         convertButton.setDisable(false);
         return;
       }
-
       new Thread(installer::generatePackage).start();
     } catch (IllegalArgumentException e) {
       // Відображення повідомлення про помилку

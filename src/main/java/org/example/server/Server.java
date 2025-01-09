@@ -3,12 +3,17 @@ package org.example.server;
 import java.io.*;
 import java.net.*;
 import java.sql.*;
+import org.example.entities.User;
+import org.example.server.dao.FileDao;
+import org.example.server.dao.LicenseDao;
+import org.example.server.dao.UserDao;
 import org.example.utils.DatabaseUtil;
 
 public class Server {
 
   private static final int PORT = 8080;
   private static Connection connection;
+
 
   public static void main(String[] args) {
     try {
@@ -38,9 +43,16 @@ public class Server {
 
   static class ClientHandler extends Thread {
     private Socket socket;
+    private UserDao userDao;
+    private LicenseDao licenseDao;
+    private FileDao fileDao;
 
     public ClientHandler(Socket socket) {
+
       this.socket = socket;
+      this.userDao = new UserDao(connection);
+      this.licenseDao = new LicenseDao(connection);
+      this.fileDao = new FileDao(connection);
     }
 
     @Override
@@ -71,25 +83,24 @@ public class Server {
         String[] parts = request.split(" ");
         switch (parts[0]) {
           case "REGISTER":
-          // Перевірка наявності параметра `license`
-          if (parts.length == 4) { // username, password, license
-            boolean license = Boolean.parseBoolean(parts[3]); // Конвертуємо в boolean
-            return registerUser(parts[1], parts[2], license);
+          if (parts.length == 4) {
+            boolean license = Boolean.parseBoolean(parts[3]);
+            return userDao.registerUser(parts[1], parts[2], license);
           }
             break;
           case "LOGIN":
             if (parts.length == 3) {
-              return loginUser(parts[1], parts[2]);
+              return userDao.loginUser(parts[1], parts[2]);
             }
             break;
           case "VALIDATE_LICENSE":
             if (parts.length == 2) {
-              return isValidLicenseKey(parts[1]);
+              return licenseDao.isValidLicenseKey(parts[1]);
             }
             break;
           case "SAVE_FILE":
             if (parts.length == 7) {
-              return saveFile(parts);
+              return fileDao.saveFile(parts);
             }
             break;
           default:
@@ -100,69 +111,5 @@ public class Server {
       }
       return "Invalid request format";
     }
-
-    private String loginUser(String username, String password) throws SQLException {
-      String query = "SELECT * FROM users WHERE username = ? AND password = ?";
-      try (PreparedStatement stmt = connection.prepareStatement(query)) {
-        stmt.setString(1, username);
-        stmt.setString(2, password);
-        try (ResultSet rs = stmt.executeQuery()) {
-          if (rs.next()) {
-            // Перевірка статусу преміум
-            boolean isPremium = rs.getBoolean("license"); // Перевірка преміум статусу
-            return isPremium ? "Login successful - Premium User" : "Login successful - Regular User";
-          } else {
-            return "Login failed";
-          }
-        }
-      }
-    }
-
-
-    private String isValidLicenseKey(String licenseKey) {
-      String query = "SELECT COUNT(*) FROM license_keys WHERE license_key = ?";
-      try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setString(1, licenseKey);
-        try (ResultSet resultSet = statement.executeQuery()) {
-          if (resultSet.next() && resultSet.getInt(1) > 0) {
-            return "VALID_LICENSE";
-          }
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
-        return "ERROR: " + e.getMessage();
-      }
-      return "INVALID_LICENSE";
-    }
-
-
-
-
-    private String registerUser(String username, String password, boolean license) throws SQLException {
-      String query = "INSERT INTO users (username, password, license) VALUES (?, ?, ?)";
-      try (PreparedStatement stmt = connection.prepareStatement(query)) {
-        stmt.setString(1, username);
-        stmt.setString(2, password);
-        stmt.setBoolean(3, license);
-        stmt.executeUpdate();
-        return "User registered successfully";
-      }
-    }
-
-    private String saveFile(String[] parts) throws SQLException {
-      String query = "INSERT INTO files (user_id, input_file_path, input_file_type, output_file_path, output_file_type, icon) " +
-          "VALUES (?, ?, ?, ?, ?, ?)";
-      try (PreparedStatement stmt = connection.prepareStatement(query)) {
-        stmt.setInt(1, Integer.parseInt(parts[1])); // user_id
-        stmt.setString(2, parts[2]); // input_file_path
-        stmt.setString(3, parts[3]); // input_file_type
-        stmt.setString(4, parts[4]); // output_file_path
-        stmt.setString(5, parts[5]); // output_file_type
-        stmt.setString(6, parts[6]); // icon
-        stmt.executeUpdate();
-        return "File saved successfully";
-      }
-    }
-
   }
 }

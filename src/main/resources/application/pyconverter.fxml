@@ -48,6 +48,7 @@
 
   <CheckBox fx:id="enableEncryptionCheckBox" text="Enable Encryption" disable="true" />
 
+
   <!-- Кнопка конвертації -->
   <Button fx:id="convertButton" text="Convert" onAction="#handleConvert" style="-fx-background-color: #32CD32; -fx-text-fill: white; -fx-font-size: 16px; -fx-border-radius: 5; -fx-background-radius: 5;" />
   <Button text="Back to Welcome" onAction="#goToWelcome" style="-fx-background-color: #4682B4; -fx-text-fill: white;" />

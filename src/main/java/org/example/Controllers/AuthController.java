@@ -54,11 +54,15 @@ public class AuthController {
       // Send login request to the server
       String response = client.sendRequest("LOGIN " + username + " " + password);
       if (response.equals("Login successful - Premium User")) {
-        Session.initializeState(true);
+        //Session.initializeState(true);
+        int userId = extractUserId(response); // Метод для вилучення userId із відповіді
+        Session.initializeState(userId, true);
         showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
         navigateToWelcome(event);
       }
       else if(response.equals("Login successful - Regular User")){
+        int userId = extractUserId(response); // Метод для вилучення userId із відповіді
+        Session.initializeState(userId, false);
         showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
         navigateToWelcome(event);
       }
@@ -80,7 +84,6 @@ public class AuthController {
 
     User user =  new User(username, password);
     try {
-      // Validate fields
      user.validate();
 
       boolean isPremium = validateLicense(event);
@@ -140,6 +143,13 @@ public class AuthController {
       e.printStackTrace();
       showAlert(Alert.AlertType.ERROR, "Navigation Error", "Failed to load welcome page.");
     }
+  }
+
+  private int extractUserId(String response) {
+    // Логіка вилучення userId з відповіді сервера
+    // Наприклад, якщо сервер повертає щось типу "Login successful - UserId:123"
+    String[] parts = response.split(":");
+    return Integer.parseInt(parts[1].trim());
   }
 
 }

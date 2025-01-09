@@ -1,6 +1,7 @@
 package org.example.state;
 
 
+import javafx.scene.control.ButtonBase;
 import org.example.builder.Installer;
 
 public class PremiumState implements UserState {
@@ -11,9 +12,9 @@ public class PremiumState implements UserState {
   }
 
   @Override
-  public void enableEncryptionFeature() {
+  public void enableEncryptionFeature(ButtonBase button) {
     System.out.println("Encryption feature is enabled for premium users.");
-    // У GUI можна показати активну опцію шифрування
+    button.setDisable(false);
   }
 
   @Override

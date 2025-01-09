@@ -16,7 +16,8 @@ public class AESEncryptionStrategy implements EncryptionStrategy {
     Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
     cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
-    String encryptedFilePath = filePath + ".encrypted";
+    // Додаємо розширення ".enc" до зашифрованого файлу
+    String encryptedFilePath = filePath + ".enc";
 
     try (InputStream is = new FileInputStream(filePath);
         OutputStream os = new FileOutputStream(encryptedFilePath)) {
@@ -37,13 +38,12 @@ public class AESEncryptionStrategy implements EncryptionStrategy {
     File originalFile = new File(filePath);
     File encryptedFile = new File(encryptedFilePath);
 
-    if (originalFile.delete() && encryptedFile.renameTo(originalFile)) {
-      System.out.println("Файл успішно зашифровано: " + filePath);
-    } else {
-      throw new RuntimeException("Не вдалося замінити оригінальний файл зашифрованим файлом.");
+    // Видаляємо оригінальний файл, якщо потрібно, або залишаємо його для резервного копіювання
+    if (originalFile.delete()) {
+      System.out.println("Оригінальний файл видалено: " + filePath);
     }
+    System.out.println("Файл успішно зашифровано: " + encryptedFilePath);
   }
-
 
   @Override
   public void decrypt(String filePath, String key) throws Exception {
@@ -51,7 +51,8 @@ public class AESEncryptionStrategy implements EncryptionStrategy {
     Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
     cipher.init(Cipher.DECRYPT_MODE, secretKey);
 
-    String decryptedFilePath = filePath + ".decrypted";
+    // Видаляємо розширення ".enc" для розшифрованого файлу
+    String decryptedFilePath = filePath.replace(".enc", "");
 
     try (InputStream is = new FileInputStream(filePath);
         OutputStream os = new FileOutputStream(decryptedFilePath)) {
@@ -72,11 +73,10 @@ public class AESEncryptionStrategy implements EncryptionStrategy {
     File originalFile = new File(filePath);
     File decryptedFile = new File(decryptedFilePath);
 
-    if (originalFile.delete() && decryptedFile.renameTo(originalFile)) {
-      System.out.println("Файл успішно розшифровано: " + filePath);
-    } else {
-      throw new RuntimeException("Не вдалося замінити оригінальний файл розшифрованим файлом.");
+    // Видаляємо зашифрований файл, якщо потрібно
+    if (originalFile.delete()) {
+      System.out.println("Зашифрований файл видалено: " + filePath);
     }
+    System.out.println("Файл успішно розшифровано: " + decryptedFilePath);
   }
-
 }
