@@ -6,7 +6,7 @@
 <?import javafx.scene.*?>
 
 <VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/20"
-  xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controllers.WelcomeController"
+  xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.WelcomeController"
   style="-fx-background-color: #40E0D0; -fx-padding: 20;" prefWidth="600" prefHeight="600">
 
   <Label text="Welcome to the installer generator" style="-fx-font-size: 24px; -fx-text-fill: white;" wrapText="true"/>

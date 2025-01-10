@@ -5,7 +5,7 @@
 <?import java.lang.String?>
 
 <VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/20"
-  xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controllers.JarConverterController"
+  xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.JarConverterController"
   style="-fx-background-color: #40E0D0; -fx-padding: 20;" prefWidth="600" prefHeight="600">
 
   <!-- Заголовок -->
@@ -49,6 +49,7 @@
 
 
   <CheckBox fx:id="enableEncryptionCheckBox" text="Enable Encryption" disable="true" />
+  <CheckBox fx:id="enableCompressionCheckBox" text="Enable compression" disable="false" />
 
   <!-- Кнопка конвертації -->
   <Button fx:id="convertButton" text="Convert" onAction="#handleConvert" style="-fx-background-color: #32CD32; -fx-text-fill: white; -fx-font-size: 16px; -fx-border-radius: 5; -fx-background-radius: 5;" />

@@ -1,4 +1,4 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -12,10 +12,6 @@ import javafx.stage.Stage;
 import org.example.entities.User;
 import org.example.server.Client;
 import org.example.state.Session;
-import org.example.validation.MinLengthHandler;
-import org.example.validation.NotEmptyHandler;
-import org.example.validation.UsernameFormatHandler;
-import org.example.validation.ValidationHandler;
 
 public class AuthController {
 
@@ -41,7 +37,6 @@ public class AuthController {
 
   public AuthController() {
     client = new Client();
-    Session.initializeState(false);
   }
 
 
@@ -53,14 +48,14 @@ public class AuthController {
     try {
       // Send login request to the server
       String response = client.sendRequest("LOGIN " + username + " " + password);
-      if (response.equals("Login successful - Premium User")) {
+      if (response.contains("Premium User")) {
         //Session.initializeState(true);
         int userId = extractUserId(response); // Метод для вилучення userId із відповіді
         Session.initializeState(userId, true);
-        showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
+        showAlert(Alert.AlertType.INFORMATION, "Login Successful, Premium user", "Welcome, " + username + "!");
         navigateToWelcome(event);
       }
-      else if(response.equals("Login successful - Regular User")){
+      else if(response.contains("Regular User")){
         int userId = extractUserId(response); // Метод для вилучення userId із відповіді
         Session.initializeState(userId, false);
         showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
@@ -146,10 +141,13 @@ public class AuthController {
   }
 
   private int extractUserId(String response) {
-    // Логіка вилучення userId з відповіді сервера
-    // Наприклад, якщо сервер повертає щось типу "Login successful - UserId:123"
-    String[] parts = response.split(":");
+    // Припускаємо, що сервер відповідає: "Login successful - Regular User userId:123"
+    String[] parts = response.split("userId:");
+    if (parts.length < 2) {
+      throw new IllegalArgumentException("Invalid response format");
+    }
     return Integer.parseInt(parts[1].trim());
   }
+
 
 }

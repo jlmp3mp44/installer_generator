@@ -1,4 +1,4 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 
 import javafx.scene.control.CheckBox;
@@ -8,11 +8,6 @@ import org.example.entities.InputFile;
 import org.example.entities.OutputFile;
 import org.example.server.Client;
 import org.example.state.Session;
-import org.example.validation.DirectoryExistsHandler;
-import org.example.validation.FileExistsHandler;
-import org.example.validation.FileFormatHandler;
-import org.example.validation.NotEmptyHandler;
-import org.example.validation.ValidationHandler;
 import java.io.IOException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -59,6 +54,8 @@ public class PyConverterController {
   @FXML
   private CheckBox enableEncryptionCheckBox;
 
+  @FXML
+  private CheckBox enableCompressionCheckBox;
 
   private Client client;
 
@@ -107,6 +104,7 @@ public class PyConverterController {
   @FXML
   private void handleConvert(ActionEvent event) {
     boolean encryptionEnabled = enableEncryptionCheckBox.isSelected();
+    boolean compressionEnambled = enableCompressionCheckBox.isSelected();
 
     // Зробити кнопку недоступною
     convertButton.setDisable(true);
@@ -134,6 +132,7 @@ public class PyConverterController {
 
       ConversionSettings settings = new ConversionSettings();
       settings.setEnableEncryption(encryptionEnabled);
+      settings.setEnableCompression(compressionEnambled);
       settings.setAddShortcut(true);
       settings.setInstallPath(saveDirectory);
       outputFile = new OutputFile(outputFilePath, fileName, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);

@@ -11,7 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESEncryptionStrategy implements EncryptionStrategy {
 
   @Override
-  public void encrypt(String filePath, String key) throws Exception {
+  public String encrypt(String filePath, String key) throws Exception {
     SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "AES");
     Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
     cipher.init(Cipher.ENCRYPT_MODE, secretKey);
@@ -43,6 +43,8 @@ public class AESEncryptionStrategy implements EncryptionStrategy {
       System.out.println("Оригінальний файл видалено: " + filePath);
     }
     System.out.println("Файл успішно зашифровано: " + encryptedFilePath);
+
+    return encryptedFilePath;
   }
 
   @Override

@@ -5,6 +5,8 @@ import java.util.List;
 import org.example.converter.Converter;
 import org.example.converter.ConverterFactory;
 
+import org.example.encryption.BaseProcessor;
+import org.example.encryption.CompressionProcessor;
 import org.example.entities.ConversionSettings;
 import org.example.entities.InputFile;
 import org.example.entities.OutputFile;
@@ -49,19 +51,24 @@ public class Installer extends InstallationSubject {
       e.printStackTrace();
     }
 
+    FileProcessor processor =  new BaseProcessor();
     if (settings.isEnableEncryption()) {
       notifyObservers("Encrypting", 80);
-      FileProcessor processor = new EncryptionProcessor(new AESEncryptionStrategy());
-      try {
-        processor.process(outputFile.getFilePath(), outputFile.getFilePath(), "mysecretkey12345");
-        notifyObservers("Package encrypting completed successfully!", 100);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
+      processor = new EncryptionProcessor(new AESEncryptionStrategy());
+    }
+    if (settings.isEnableCompression()) {
+      processor = new CompressionProcessor(processor);
+    }
+    try {
+      processor.process(outputFile.getFilePath(), "mysecretkey12345");
+      notifyObservers("Package encrypting completed successfully!", 100);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+
       //decryptAndLaunch();
     }
 
-  }
 
   private void decryptAndLaunch() {
     System.out.println("Starting decryption and launch process...");

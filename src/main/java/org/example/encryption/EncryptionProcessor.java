@@ -10,16 +10,16 @@ public class EncryptionProcessor implements FileProcessor {
   }
 
   @Override
-  public void process(String inputFile, String outputFile, String key) throws Exception {
-    File input = new File(inputFile);
+  public String process(String outputFile, String key) throws Exception {
+    File input = new File(outputFile);
     if (!input.exists() || input.length() == 0) {
-      throw new RuntimeException("Input file is missing or empty: " + inputFile);
+      throw new RuntimeException("Input file is missing or empty: " + outputFile);
     }
 
-    System.out.println("Encrypting file: " + inputFile);
+    System.out.println("Encrypting file: " + outputFile);
 
     // Виконання шифрування
-    strategy.encrypt(outputFile, key);
+   outputFile =  strategy.encrypt(outputFile, key);
 
     // Перевірка створення вихідного файлу
    /* File output = new File(outputFile);
@@ -28,5 +28,6 @@ public class EncryptionProcessor implements FileProcessor {
     }*/
 
     System.out.println("Encryption completed. Output file: " + outputFile);
+    return outputFile;
   }
 }

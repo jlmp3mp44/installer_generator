@@ -25,14 +25,17 @@ public class UserDao {
 
 
   public String loginUser(String username, String password) {
-    String query = "SELECT license FROM users WHERE username = ? AND password = ?";
+    String query = "SELECT id, license FROM users WHERE username = ? AND password = ?";
     try (PreparedStatement stmt = connection.prepareStatement(query)) {
       stmt.setString(1, username);
       stmt.setString(2, password);
       try (ResultSet rs = stmt.executeQuery()) {
         if (rs.next()) {
+          int userId = rs.getInt("id");
           boolean isPremium = rs.getBoolean("license");
-          return isPremium ? "Login successful - Premium User userId:" : "Login successful - Regular User";
+          return isPremium
+              ? "Login successful - Premium User userId:" + userId
+              : "Login successful - Regular User userId:" + userId;
         } else {
           return "Login failed";
         }
@@ -41,4 +44,5 @@ public class UserDao {
       return "Error: " + e.getMessage();
     }
   }
+
 }

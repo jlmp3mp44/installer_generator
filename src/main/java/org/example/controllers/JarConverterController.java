@@ -1,4 +1,4 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 
 import java.io.IOException;
@@ -21,18 +21,12 @@ import javafx.stage.Stage;
 import org.example.builder.Installer;
 import org.example.entities.ConversionSettings;
 import org.example.entities.InputFile;
-import org.example.entities.InputFile.FileType;
 import org.example.entities.OutputFile;
 import org.example.observer.InstallationObserver;
 
 import java.io.File;
 import org.example.server.Client;
 import org.example.state.Session;
-import org.example.validation.DirectoryExistsHandler;
-import org.example.validation.FileExistsHandler;
-import org.example.validation.FileFormatHandler;
-import org.example.validation.NotEmptyHandler;
-import org.example.validation.ValidationHandler;
 
 public class JarConverterController {
 
@@ -60,6 +54,8 @@ public class JarConverterController {
 
   @FXML
   private CheckBox enableEncryptionCheckBox;
+  @FXML
+  private CheckBox enableCompressionCheckBox;
 
   private Client client;
 
@@ -106,6 +102,7 @@ public class JarConverterController {
   private void handleConvert(ActionEvent event) {
     convertButton.setDisable(true);
     boolean encryptionEnabled = enableEncryptionCheckBox.isSelected();
+    boolean compressionEnambled = enableCompressionCheckBox.isSelected();
 
     String jarFile = jarFilePath.getText();
     String saveLocation = savePath.getText();
@@ -130,6 +127,7 @@ public class JarConverterController {
 
       ConversionSettings settings = new ConversionSettings();
       settings.setEnableEncryption(encryptionEnabled);
+      settings.setEnableCompression(compressionEnambled);
       settings.setAddShortcut(true);
       settings.setInstallPath(saveLocation);
       outputFile =  new OutputFile(outputFilePath, desiredFileName, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);

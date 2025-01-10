@@ -19,15 +19,17 @@ public class XmlFileGenerator implements FileGenerator {
   @Override
   public String generateContent() {
     return "<launch4jConfig>\n" +
+        "  <dontWrapJar>false</dontWrapJar>\n" +  // Ensure JAR wrapping is disabled
         "  <outfile>" + outputFile.getFilePath() + "</outfile>\n" +
         "  <jar>" + inputFile.getFilePath() + "</jar>\n" +
-        "  <headerType>console</headerType>\n\n\n" +
+        "  <headerType>console</headerType>\n" + // Set header type to console
         "  <jre>\n" +
         "    <path>auto</path>\n" +
-        "    <minVersion>11.0.0</minVersion>\n\n" +
+        "    <minVersion>11.0.0</minVersion>\n" +
         "  </jre>\n" +
         "</launch4jConfig>";
   }
+
 
   @Override
   public void exportToFile(String filePath) {

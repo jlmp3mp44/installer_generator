@@ -5,6 +5,7 @@ public class ConversionSettings {
   private String installPath;
   private String licenseKey;
   private boolean enableEncryption;
+  private boolean enableCompression;
 
   public boolean isEnableEncryption() {
     return enableEncryption;
@@ -12,6 +13,14 @@ public class ConversionSettings {
 
   public void setEnableEncryption(boolean enableEncryption) {
     this.enableEncryption = enableEncryption;
+  }
+
+  public boolean isEnableCompression() {
+    return enableCompression;
+  }
+
+  public void setEnableCompression(boolean enableCompression) {
+    this.enableCompression = enableCompression;
   }
 
   public boolean isAddShortcut() {
