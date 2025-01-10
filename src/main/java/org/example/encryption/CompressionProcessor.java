@@ -8,15 +8,18 @@ import java.util.zip.ZipOutputStream;
 
 public class CompressionProcessor implements FileProcessor {
   private final FileProcessor wrapped;
+  private String outputFile;
+  private String key;
+
 
   public CompressionProcessor(FileProcessor wrapped) {
     this.wrapped = wrapped;
   }
 
   @Override
-  public String process(String outputFile, String key) throws Exception {
+  public String process() throws Exception {
     // Спочатку виконуємо обгортковий процес
-    outputFile = wrapped.process(outputFile, key);
+    outputFile = wrapped.process();
 
     // Додаємо логіку стиснення
     String compressedFile = outputFile + ".zip";

@@ -27,8 +27,7 @@ public class JarToMsiConverter implements Converter {
       String candlePath = "D:\\trpz_courcework\\wix\\bin\\candle.exe";
       String lightPath = "D:\\trpz_courcework\\wix\\bin\\light.exe";
 
-      // Створюємо шлях до файлу .wixobj, вказуючи правильну директорію
-     // String wixObjFilePath = outputFile.getParent() + File.separator + configFilePath.replace(".wxs", ".wixobj");
+
       String wixObjFilePath = configFilePath.replace(".wxs", ".wixobj");
 
 

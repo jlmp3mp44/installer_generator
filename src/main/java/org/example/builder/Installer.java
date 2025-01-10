@@ -41,26 +41,29 @@ public class Installer extends InstallationSubject {
         outputFile.getFileType().toString()
     );
 
+    FileProcessor processor =  new BaseProcessor(baseConverter, file.getFilePath(), outputFile.getFilePath());
+
     notifyObservers("Converting file...", 50);
 
     try {
       baseConverter.convert(file.getFilePath(), outputFile.getFilePath());
+      processor.process();
       notifyObservers("Package generation completed successfully!", 100);
       notifyCompletion();
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-    FileProcessor processor =  new BaseProcessor();
+    //FileProcessor processor =  new BaseProcessor();
     if (settings.isEnableEncryption()) {
       notifyObservers("Encrypting", 80);
-      processor = new EncryptionProcessor(new AESEncryptionStrategy());
+      processor = new EncryptionProcessor(new AESEncryptionStrategy(), outputFile.getFilePath(), "mysecretkey12345");
     }
     if (settings.isEnableCompression()) {
       processor = new CompressionProcessor(processor);
     }
     try {
-      processor.process(outputFile.getFilePath(), "mysecretkey12345");
+      processor.process();
       notifyObservers("Package encrypting completed successfully!", 100);
     } catch (Exception e) {
       throw new RuntimeException(e);

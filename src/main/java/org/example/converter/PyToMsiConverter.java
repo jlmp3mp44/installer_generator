@@ -1,6 +1,8 @@
 package org.example.converter;
 
 import java.io.IOException;
+import java.nio.file.*;
+import java.util.stream.Stream;
 
 public class PyToMsiConverter implements Converter {
   @Override
@@ -24,8 +26,8 @@ public class PyToMsiConverter implements Converter {
       );
 
       // Записуємо setup.py
-      java.nio.file.Files.write(
-          java.nio.file.Paths.get(setupScript),
+      Files.write(
+          Paths.get(setupScript),
           setupScriptContent.getBytes()
       );
 
@@ -36,22 +38,38 @@ public class PyToMsiConverter implements Converter {
       process.waitFor();  // Чекаємо завершення
 
       // Переміщуємо створений MSI до вихідної директорії
-      java.nio.file.Path msiPath = java.nio.file.Paths.get("dist", "GeneratedApp-1.0-win64.msi");
-      java.nio.file.Files.move(msiPath, java.nio.file.Paths.get(outputFilePath));
+      Path msiPath = Paths.get("dist", "GeneratedApp-1.0-win64.msi");
+      Files.move(msiPath, Paths.get(outputFilePath), StandardCopyOption.REPLACE_EXISTING);
 
       System.out.println("Conversion completed!");
     } catch (IOException | InterruptedException e) {
       System.err.println("Error during conversion: " + e.getMessage());
       e.printStackTrace();
     } finally {
-      // Видаляємо тимчасові файли
+      // Видаляємо тимчасові файли та директорії
       try {
-        java.nio.file.Files.deleteIfExists(java.nio.file.Paths.get(setupScript));
-        java.nio.file.Files.deleteIfExists(java.nio.file.Paths.get("dist"));
-        java.nio.file.Files.deleteIfExists(java.nio.file.Paths.get("build"));
-        java.nio.file.Files.deleteIfExists(java.nio.file.Paths.get("__pycache__"));
+        Files.deleteIfExists(Paths.get(setupScript));
+        deleteDirectoryIfExists(Paths.get("dist"));
+        deleteDirectoryIfExists(Paths.get("build"));
+        deleteDirectoryIfExists(Paths.get("__pycache__"));
       } catch (IOException e) {
         System.err.println("Error cleaning up temporary files: " + e.getMessage());
+      }
+    }
+  }
+
+  // Метод для видалення директорії разом з вмістом
+  private void deleteDirectoryIfExists(Path directory) throws IOException {
+    if (Files.exists(directory) && Files.isDirectory(directory)) {
+      try (Stream<Path> files = Files.walk(directory)) {
+        files.sorted((p1, p2) -> p2.compareTo(p1))  // Видаляємо спочатку вміст, потім саму директорію
+            .forEach(path -> {
+              try {
+                Files.delete(path);
+              } catch (IOException e) {
+                System.err.println("Error deleting file: " + path + " - " + e.getMessage());
+              }
+            });
       }
     }
   }

@@ -1,8 +1,5 @@
 package org.example.entities;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import org.example.validation.MinLengthHandler;
 import org.example.validation.NotEmptyHandler;
 import org.example.validation.UsernameFormatHandler;

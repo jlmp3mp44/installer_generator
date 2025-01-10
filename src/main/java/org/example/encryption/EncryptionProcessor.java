@@ -4,13 +4,18 @@ import java.io.File;
 
 public class EncryptionProcessor implements FileProcessor {
   private final EncryptionStrategy strategy;
+  private String outputFile;
+  private String key;
 
-  public EncryptionProcessor(EncryptionStrategy strategy) {
+  public EncryptionProcessor(EncryptionStrategy strategy, String outputFile, String key) {
     this.strategy = strategy;
+    this.outputFile = outputFile;
+    this.key = key;
   }
 
+
   @Override
-  public String process(String outputFile, String key) throws Exception {
+  public String process() throws Exception {
     File input = new File(outputFile);
     if (!input.exists() || input.length() == 0) {
       throw new RuntimeException("Input file is missing or empty: " + outputFile);
@@ -20,12 +25,6 @@ public class EncryptionProcessor implements FileProcessor {
 
     // Виконання шифрування
    outputFile =  strategy.encrypt(outputFile, key);
-
-    // Перевірка створення вихідного файлу
-   /* File output = new File(outputFile);
-    if (!output.exists() || output.length() == 0) {
-      throw new RuntimeException("Encryption failed: Output file is missing or empty: " + outputFile);
-    }*/
 
     System.out.println("Encryption completed. Output file: " + outputFile);
     return outputFile;

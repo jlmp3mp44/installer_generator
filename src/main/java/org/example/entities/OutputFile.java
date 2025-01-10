@@ -1,8 +1,6 @@
 package org.example.entities;
 
 import org.example.validation.DirectoryExistsHandler;
-import org.example.validation.FileExistsHandler;
-import org.example.validation.FileFormatHandler;
 import org.example.validation.NotEmptyHandler;
 import org.example.validation.ValidationHandler;
 

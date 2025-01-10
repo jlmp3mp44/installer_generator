@@ -17,15 +17,5 @@ public class PremiumState implements UserState {
     button.setDisable(false);
   }
 
-  @Override
-  public void handleConversion(boolean encryptionEnabled, Installer installer) {
-    if (encryptionEnabled) {
-      System.out.println("Performing conversion with encryption...");
-      // Логіка конвертації з шифруванням
-    } else {
-      System.out.println("Performing conversion without encryption...");
-      installer.generatePackage();
-    }
-  }
 }
 

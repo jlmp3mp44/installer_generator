@@ -17,14 +17,4 @@ public class BasicState implements UserState {
     button.setDisable(true);
   }
 
-  @Override
-  public void handleConversion(boolean encryptionEnabled, Installer installer) {
-    if (encryptionEnabled) {
-      throw new UnsupportedOperationException("Encryption is not allowed for basic users.");
-    }
-
-    System.out.println("Performing basic conversion...");
-    // Викликаємо стандартну конвертацію через Installer
-    installer.generatePackage();
-  }
 }

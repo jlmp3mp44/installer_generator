@@ -16,7 +16,6 @@ public class ConverterFactory {
     else if (inputFileType.equalsIgnoreCase("jar") && outputFileType.equalsIgnoreCase("msi")) {
       return new JarToMsiConverter();
     }
-    // Додайте інші варіанти за потребою
     throw new IllegalArgumentException("Unsupported conversion type");
   }
 }

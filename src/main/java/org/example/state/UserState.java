@@ -7,7 +7,6 @@ import org.example.builder.Installer;
 
 public interface UserState {
   boolean isPremium();
-  void enableEncryptionFeature(ButtonBase button); // Налаштування GUI
-  void handleConversion(boolean encryptionEnabled, Installer installer); // Виконання дій
+  void enableEncryptionFeature(ButtonBase button);
 }
 

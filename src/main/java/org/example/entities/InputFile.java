@@ -1,6 +1,5 @@
 package org.example.entities;
 
-import java.io.File;
 import org.example.validation.FileExistsHandler;
 import org.example.validation.FileFormatHandler;
 import org.example.validation.NotEmptyHandler;

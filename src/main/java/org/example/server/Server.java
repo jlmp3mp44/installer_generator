@@ -3,7 +3,6 @@ package org.example.server;
 import java.io.*;
 import java.net.*;
 import java.sql.*;
-import org.example.entities.User;
 import org.example.server.dao.FileDao;
 import org.example.server.dao.LicenseDao;
 import org.example.server.dao.UserDao;

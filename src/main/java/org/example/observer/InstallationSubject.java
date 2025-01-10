@@ -20,7 +20,6 @@ public class InstallationSubject {
     }
   }
 
-  // Новий метод для повідомлення про завершення
   public void notifyCompletion() {
     for (InstallationObserver observer : observers) {
       observer.onCompletion();
