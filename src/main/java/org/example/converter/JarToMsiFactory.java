@@ -1,8 +1,9 @@
 package org.example.converter;
 
-public class JarToMsiFactory extends ConverterFactory {
+public class JarToMsiFactory implements ConverterFactory {
 
-  public static Converter createConverter() {
+  @Override
+  public  Converter createConverter() {
     return new JarToMsiConverter();
   }
 }

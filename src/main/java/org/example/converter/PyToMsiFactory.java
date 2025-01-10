@@ -1,8 +1,8 @@
 package org.example.converter;
 
-public class PyToMsiFactory extends ConverterFactory {
-
-  public static Converter createConverter() {
+class PyToMsiFactory implements ConverterFactory {
+  @Override
+  public Converter createConverter() {
     return new PyToMsiConverter();
   }
 }

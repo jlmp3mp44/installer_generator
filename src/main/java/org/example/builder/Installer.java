@@ -5,6 +5,7 @@ import java.util.List;
 import org.example.converter.Converter;
 import org.example.converter.ConverterFactory;
 
+import org.example.converter.ConverterFactorySelector;
 import org.example.encryption.BaseProcessor;
 import org.example.encryption.CompressionProcessor;
 import org.example.entities.ConversionSettings;
@@ -36,10 +37,8 @@ public class Installer extends InstallationSubject {
     System.out.println("Generating " + outputFile.getFileType() + " file at " + outputFile.getFilePath());
     notifyObservers("Preparing conversion...", 20);
 
-    Converter baseConverter = ConverterFactory.createConverter(
-        file.getFileType().toString(),
-        outputFile.getFileType().toString()
-    );
+    ConverterFactory factory = ConverterFactorySelector.getFactory(file.getFileType().toString(), outputFile.getFileType().toString());
+    Converter baseConverter  = factory.createConverter();
 
     FileProcessor processor =  new BaseProcessor(baseConverter, file.getFilePath(), outputFile.getFilePath());
 

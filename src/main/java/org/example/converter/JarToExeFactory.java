@@ -1,8 +1,8 @@
 package org.example.converter;
 
-public class JarToExeFactory extends ConverterFactory {
-
-  public static Converter createConverter(String inputFileType, String outputFileType) {
+class JarToExeFactory implements ConverterFactory {
+  @Override
+  public Converter createConverter() {
     return new JarToExeConverter();
   }
 }
