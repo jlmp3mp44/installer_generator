@@ -3,11 +3,12 @@ package org.example.builder;
 import java.util.ArrayList;
 import java.util.List;
 import org.example.converter.Converter;
-import org.example.converter.ConverterFactory;
+import org.example.converter.factory.ConverterFactory;
 
-import org.example.converter.ConverterFactorySelector;
+import org.example.converter.factory.ConverterFactorySelector;
 import org.example.encryption.BaseProcessor;
 import org.example.encryption.CompressionProcessor;
+import org.example.encryption.ShortcutProcessor;
 import org.example.entities.ConversionSettings;
 import org.example.entities.InputFile;
 import org.example.entities.OutputFile;
@@ -45,8 +46,8 @@ public class Installer extends InstallationSubject {
     notifyObservers("Converting file...", 50);
 
     try {
-      baseConverter.convert(file.getFilePath(), outputFile.getFilePath());
-      processor.process();
+      //baseConverter.convert(file.getFilePath(), outputFile.getFilePath());
+      //processor.process();
       notifyObservers("Package generation completed successfully!", 100);
       notifyCompletion();
     } catch (Exception e) {
@@ -60,6 +61,9 @@ public class Installer extends InstallationSubject {
     }
     if (settings.isEnableCompression()) {
       processor = new CompressionProcessor(processor);
+    }
+    else if (settings.isAddShortcut()){
+      processor =  new ShortcutProcessor(processor, true);
     }
     try {
       processor.process();

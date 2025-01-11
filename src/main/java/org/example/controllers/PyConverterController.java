@@ -57,6 +57,10 @@ public class PyConverterController {
   @FXML
   private CheckBox enableCompressionCheckBox;
 
+  @FXML
+  private CheckBox createShortcutCheckBox;
+
+
   private Client client;
 
 
@@ -105,6 +109,8 @@ public class PyConverterController {
   private void handleConvert(ActionEvent event) {
     boolean encryptionEnabled = enableEncryptionCheckBox.isSelected();
     boolean compressionEnambled = enableCompressionCheckBox.isSelected();
+    boolean createShortcut = createShortcutCheckBox.isSelected();
+
 
     // Зробити кнопку недоступною
     convertButton.setDisable(true);
@@ -133,6 +139,7 @@ public class PyConverterController {
       ConversionSettings settings = new ConversionSettings();
       settings.setEnableEncryption(encryptionEnabled);
       settings.setEnableCompression(compressionEnambled);
+      settings.setAddShortcut(createShortcut);
       settings.setAddShortcut(true);
       settings.setInstallPath(saveDirectory);
       outputFile = new OutputFile(outputFilePath, fileName, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);

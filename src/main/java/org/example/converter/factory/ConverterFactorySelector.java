@@ -1,4 +1,5 @@
-package org.example.converter;
+package org.example.converter.factory;
+
 
 public class ConverterFactorySelector {
   public static ConverterFactory getFactory(String inputFileType, String outputFileType) {
@@ -9,7 +10,7 @@ public class ConverterFactorySelector {
     } else if (inputFileType.equalsIgnoreCase("jar") && outputFileType.equalsIgnoreCase("exe")) {
       return new JarToExeFactory();
     } else if (inputFileType.equalsIgnoreCase("jar") && outputFileType.equalsIgnoreCase("msi")) {
-      return new JarToMsiFactory();
+      return new CombinedJarToMsiFactory();
     }
     throw new IllegalArgumentException("Unsupported conversion type");
   }

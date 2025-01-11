@@ -9,7 +9,7 @@ public class JarToMsiConverter implements Converter {
 
   @Override
   public void convert(String inputFilePath, String outputFilePath) {
-    System.out.println("Конвертація JAR у MSI: " + inputFilePath + " → " + outputFilePath);
+    System.out.println("Конвертація EXE у MSI: " + inputFilePath + " → " + outputFilePath);
 
     try {
 
@@ -44,7 +44,7 @@ public class JarToMsiConverter implements Converter {
 
     } catch (Exception e) {
       e.printStackTrace();
-      System.err.println("Помилка під час конвертації JAR у MSI!");
+      System.err.println("Помилка під час конвертації EXE у MSI!");
     }
   }
 
