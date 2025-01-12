@@ -6,9 +6,10 @@ import org.example.converter.Converter;
 import org.example.converter.factory.ConverterFactory;
 
 import org.example.converter.factory.ConverterFactorySelector;
-import org.example.encryption.BaseProcessor;
-import org.example.encryption.CompressionProcessor;
-import org.example.encryption.ShortcutProcessor;
+import org.example.processor.BaseProcessor;
+import org.example.processor.BlowfishEncryptionStrategy;
+import org.example.processor.CompressionProcessor;
+import org.example.processor.ShortcutProcessor;
 import org.example.entities.ConversionSettings;
 import org.example.entities.InputFile;
 import org.example.entities.OutputFile;
@@ -17,9 +18,8 @@ import org.example.file_generator.XmlFileGenerator;
 import org.example.launcher.DecryptAndLaunch;
 import org.example.observer.InstallationObserver;
 import org.example.observer.InstallationSubject;
-import org.example.encryption.AESEncryptionStrategy;
-import org.example.encryption.EncryptionProcessor;
-import org.example.encryption.FileProcessor;
+import org.example.processor.EncryptionProcessor;
+import org.example.processor.FileProcessor;
 
 public class Installer extends InstallationSubject {
   private InputFile file;
@@ -41,7 +41,7 @@ public class Installer extends InstallationSubject {
     ConverterFactory factory = ConverterFactorySelector.getFactory(file.getFileType().toString(), outputFile.getFileType().toString());
     Converter baseConverter  = factory.createConverter();
 
-    FileProcessor processor =  new BaseProcessor(baseConverter, file.getFilePath(), outputFile.getFilePath());
+    FileProcessor processor = new BaseProcessor(baseConverter, file.getFilePath(), outputFile.getFilePath());
 
     notifyObservers("Converting file...", 50);
 
@@ -54,25 +54,31 @@ public class Installer extends InstallationSubject {
       e.printStackTrace();
     }
 
-    //FileProcessor processor =  new BaseProcessor();
+    // Adjust processor based on settings
     if (settings.isEnableEncryption()) {
-      notifyObservers("Encrypting", 80);
-      processor = new EncryptionProcessor(new AESEncryptionStrategy(), outputFile.getFilePath(), "mysecretkey12345");
-    }
-    if (settings.isEnableCompression()) {
+      notifyObservers("Encrypting...", 80);
+      processor = new EncryptionProcessor(new BlowfishEncryptionStrategy(), processor,  outputFile.getFilePath(), "mysecretkey12345");
+
+      if (settings.isEnableCompression()) {
+        processor = new CompressionProcessor(processor);
+      }
+    } else if (settings.isEnableCompression()) {
       processor = new CompressionProcessor(processor);
     }
-    else if (settings.isAddShortcut()){
-      processor =  new ShortcutProcessor(processor, true);
+
+    if (!settings.isEnableEncryption() && !settings.isEnableCompression() && settings.isAddShortcut()) {
+      processor = new ShortcutProcessor(processor, true);
     }
+
     try {
       processor.process();
-      notifyObservers("Package encrypting completed successfully!", 100);
+      notifyObservers("Processing completed successfully!", 100);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
 
-      //decryptAndLaunch();
+
+    //decryptAndLaunch();
     }
 
 

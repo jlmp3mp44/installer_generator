@@ -14,10 +14,14 @@
   <Label text="This application can convert your py or jar files to exe or msi format. Choose file paths, enter license keys if needed, or create a desktop shortcut."
     style="-fx-font-size: 16px; -fx-text-fill: white;" wrapText="true"/>
 
+  <Label text="For premium users, additional features such as file encryption and compression are available. You can secure your files with RSA encryption or compress them to save space before converting them into executable formats."
+    style="-fx-font-size: 16px; -fx-text-fill: white;" wrapText="true"/>
+
+  <Label text="With this tool, you can streamline the distribution of your Python or Java applications, ensuring they are user-friendly and ready for deployment. Whether you're a developer looking to simplify your workflow or a team seeking a reliable installer solution, this application has you covered."
+    style="-fx-font-size: 16px; -fx-text-fill: white;" wrapText="true"/>
+
   <Button text="Convert Python File" onAction="#handlePythonConvert"
     style="-fx-background-color: #4682B4; -fx-text-fill: white; -fx-font-size: 16px;"/>
   <Button text="Convert JAR File" onAction="#handleJarConvert"
     style="-fx-background-color: #4682B4; -fx-text-fill: white; -fx-font-size: 16px;"/>
 </VBox>
-
-

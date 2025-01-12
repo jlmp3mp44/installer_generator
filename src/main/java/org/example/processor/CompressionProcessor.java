@@ -1,4 +1,4 @@
-package org.example.encryption;
+package org.example.processor;
 
 import java.io.File;
 import java.io.FileInputStream;

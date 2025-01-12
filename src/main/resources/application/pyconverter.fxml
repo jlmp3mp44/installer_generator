@@ -47,7 +47,7 @@
   </HBox>
 
   <CheckBox fx:id="enableEncryptionCheckBox" text="Enable Encryption" disable="true" />
-  <CheckBox fx:id="enableCompressionCheckBox" text="Enable compression" disable="false" />
+  <CheckBox fx:id="enableCompressionCheckBox" text="Enable compression" disable="true" />
   <CheckBox fx:id="createShortcutCheckBox" text="Create shortcut on Desktop" />
 
 

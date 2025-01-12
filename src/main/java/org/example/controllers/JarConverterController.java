@@ -68,6 +68,7 @@ public class JarConverterController {
   @FXML
   public void initialize() {
     Session.getUserState().enableEncryptionFeature(enableEncryptionCheckBox);
+    Session.getUserState().enableCompressionFeature(enableCompressionCheckBox);
   }
 
   @FXML

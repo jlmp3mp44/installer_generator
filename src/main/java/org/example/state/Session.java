@@ -5,7 +5,6 @@ public class Session {
   private static int userId;
   private static UserState userState = new BasicState();
 
-
   public static UserState getUserState() {
     return userState;
   }
@@ -16,6 +15,7 @@ public class Session {
   }
 
   public static void setBasicState() {
+
     userState = new BasicState();
   }
   public static int getUserId() {

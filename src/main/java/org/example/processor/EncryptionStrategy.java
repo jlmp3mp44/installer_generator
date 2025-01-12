@@ -1,4 +1,4 @@
-package org.example.encryption;
+package org.example.processor;
 
 public interface EncryptionStrategy {
   String encrypt(String outputFile, String key) throws Exception;

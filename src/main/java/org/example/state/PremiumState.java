@@ -17,5 +17,11 @@ public class PremiumState implements UserState {
     button.setDisable(false);
   }
 
+  @Override
+  public void enableCompressionFeature(ButtonBase button) {
+    System.out.println("Encryption feature is enabled for premium users.");
+    button.setDisable(false);
+  }
+
 }
 

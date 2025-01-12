@@ -72,12 +72,8 @@ public class PyConverterController {
 
   @FXML
   public void initialize() {
-    // Налаштовуємо GUI відповідно до поточного стану
-    if (Session.getUserState().isPremium()) {
-      enableEncryptionCheckBox.setDisable(false);
-    } else {
-      enableEncryptionCheckBox.setDisable(true);
-    }
+    Session.getUserState().enableEncryptionFeature(enableEncryptionCheckBox);
+    Session.getUserState().enableCompressionFeature(enableCompressionCheckBox);
   }
 
   @FXML

@@ -1,8 +1,6 @@
 package org.example.state;
 
 import javafx.scene.control.ButtonBase;
-import javafx.scene.control.CheckBox;
-import org.example.builder.Installer;
 
 public class BasicState implements UserState {
 
@@ -14,6 +12,12 @@ public class BasicState implements UserState {
   @Override
   public void enableEncryptionFeature(ButtonBase button) {
     System.out.println("Encryption feature is disabled for basic users.");
+    button.setDisable(true);
+  }
+
+  @Override
+  public void enableCompressionFeature(ButtonBase button) {
+    System.out.println("Compression feature is disabled for basic users.");
     button.setDisable(true);
   }
 

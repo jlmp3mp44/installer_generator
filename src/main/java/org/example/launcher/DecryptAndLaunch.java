@@ -1,7 +1,7 @@
 package org.example.launcher;
 
 import java.io.File;
-import org.example.encryption.AESEncryptionStrategy;
+import org.example.processor.AESEncryptionStrategy;
 
 public class DecryptAndLaunch {
 

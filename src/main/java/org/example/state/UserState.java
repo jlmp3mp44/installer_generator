@@ -8,5 +8,7 @@ import org.example.builder.Installer;
 public interface UserState {
   boolean isPremium();
   void enableEncryptionFeature(ButtonBase button);
+
+  void enableCompressionFeature(ButtonBase button);
 }
 
