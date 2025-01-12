@@ -26,4 +26,7 @@
 
   <Button text="Login" fx:id="loginButton" onAction="#handleLogin" style="-fx-background-color: #4682B4; -fx-text-fill: white; -fx-font-size: 16px;"/>
   <Button text="Register" fx:id="registerButton" onAction="#handleRegister" style="-fx-background-color: #4682B4; -fx-text-fill: white; -fx-font-size: 16px;"/>
+
+  <Button text="Exit Application" onAction="#handleExit"
+    style="-fx-background-color: #DC143C; -fx-text-fill: white; -fx-font-size: 16px;"/>
 </VBox>

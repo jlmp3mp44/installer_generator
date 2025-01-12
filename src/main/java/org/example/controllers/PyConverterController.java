@@ -102,6 +102,13 @@ public class PyConverterController {
   }
 
   @FXML
+  private void handleExit(ActionEvent event) {
+    // Закриває програму
+    Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+    currentStage.close();
+  }
+
+  @FXML
   private void handleConvert(ActionEvent event) {
     boolean encryptionEnabled = enableEncryptionCheckBox.isSelected();
     boolean compressionEnambled = enableCompressionCheckBox.isSelected();

@@ -100,6 +100,13 @@ public class AuthController {
   }
 
   @FXML
+  private void handleExit(ActionEvent event) {
+    // Закриває програму
+    Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+    currentStage.close();
+  }
+
+  @FXML
   private boolean validateLicense(ActionEvent event) {
     String enteredLicenseKey = licenseKeyField.getText();
     boolean isLicenseValid = false;

@@ -6,15 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="93f6d455-4912-4ace-8f2b-c2022d5da013" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/builder/Installer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/builder/Installer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controllers/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controllers/JarConverterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controllers/JarConverterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/observer/GuiObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/observer/GuiObserver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/observer/InstallationSubject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/observer/InstallationSubject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/BaseProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/BaseProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/CompressionProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/CompressionProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/EncryptionProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/EncryptionProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/ShortcutProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/ShortcutProcessor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +122,7 @@
       <workItem from="1736575965946" duration="1374000" />
       <workItem from="1736577602194" duration="2234000" />
       <workItem from="1736684156232" duration="7788000" />
-      <workItem from="1736700249509" duration="5779000" />
+      <workItem from="1736700249509" duration="7882000" />
     </task>
     <servers />
   </component>
