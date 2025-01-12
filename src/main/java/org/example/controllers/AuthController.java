@@ -27,6 +27,7 @@ public class AuthController {
   @FXML
   private Button registerButton;
 
+
   @FXML
   private TextField licenseKeyField;
 

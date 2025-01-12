@@ -3,23 +3,27 @@ package org.example.processor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.function.BiConsumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class CompressionProcessor implements FileProcessor {
   private final FileProcessor wrapped;
   private String outputFile;
-  private String key;
+  private final BiConsumer<String, Integer> notifier;
 
 
-  public CompressionProcessor(FileProcessor wrapped) {
+  public CompressionProcessor(FileProcessor wrapped, BiConsumer<String, Integer> notifier) {
     this.wrapped = wrapped;
+    this.notifier = notifier;
   }
 
   @Override
   public String process() throws Exception {
     // Спочатку виконуємо обгортковий процес
     outputFile = wrapped.process();
+    notifier.accept("Compressing...", 80);
+
 
     // Додаємо логіку стиснення
     String compressedFile = outputFile + ".zip";

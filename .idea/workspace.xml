@@ -6,25 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="93f6d455-4912-4ace-8f2b-c2022d5da013" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.zip" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/builder/Installer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/builder/Installer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controllers/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controllers/JarConverterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controllers/JarConverterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controllers/PyConverterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controllers/PyConverterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/encryption/AESEncryptionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/AESEncryptionStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/encryption/BaseProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/BaseProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/encryption/CompressionProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/CompressionProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/encryption/EncryptionProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/EncryptionProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/encryption/EncryptionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/EncryptionStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/encryption/FileProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/FileProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/encryption/ShortcutProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/ShortcutProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/launcher/DecryptAndLaunch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/launcher/DecryptAndLaunch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/server/dao/FileDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/server/dao/FileDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/state/BasicState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/state/BasicState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/state/PremiumState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/state/PremiumState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/state/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/state/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/state/UserState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/state/UserState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application/pyconverter.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application/pyconverter.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application/welcome.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application/welcome.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/observer/GuiObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/observer/GuiObserver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/observer/InstallationSubject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/observer/InstallationSubject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/BaseProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/BaseProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/CompressionProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/CompressionProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/EncryptionProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/EncryptionProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/ShortcutProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/ShortcutProcessor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,6 +131,7 @@
       <workItem from="1736575965946" duration="1374000" />
       <workItem from="1736577602194" duration="2234000" />
       <workItem from="1736684156232" duration="7788000" />
+      <workItem from="1736700249509" duration="5779000" />
     </task>
     <servers />
   </component>

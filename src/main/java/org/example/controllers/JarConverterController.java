@@ -22,6 +22,7 @@ import org.example.builder.Installer;
 import org.example.entities.ConversionSettings;
 import org.example.entities.InputFile;
 import org.example.entities.OutputFile;
+import org.example.observer.GuiObserver;
 import org.example.observer.InstallationObserver;
 
 import java.io.File;
@@ -54,8 +55,12 @@ public class JarConverterController {
 
   @FXML
   private CheckBox enableEncryptionCheckBox;
+
   @FXML
   private CheckBox enableCompressionCheckBox;
+
+  @FXML
+  private CheckBox createShortcutCheckBox;
 
   private Client client;
 
@@ -104,6 +109,7 @@ public class JarConverterController {
     convertButton.setDisable(true);
     boolean encryptionEnabled = enableEncryptionCheckBox.isSelected();
     boolean compressionEnambled = enableCompressionCheckBox.isSelected();
+    boolean createShortcut = createShortcutCheckBox.isSelected();
 
     String jarFile = jarFilePath.getText();
     String saveLocation = savePath.getText();
@@ -129,14 +135,14 @@ public class JarConverterController {
       ConversionSettings settings = new ConversionSettings();
       settings.setEnableEncryption(encryptionEnabled);
       settings.setEnableCompression(compressionEnambled);
-      settings.setAddShortcut(true);
+      settings.setAddShortcut(createShortcut);
       settings.setInstallPath(saveLocation);
       outputFile =  new OutputFile(outputFilePath, desiredFileName, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
       Installer installer = new Installer.Builder()
           .addFile(inputFile)
           .setConversionSettings(settings)
           .setOutputFile(outputFile)
-          .addObserver(new InstallationObserver() {
+          .addObserver(new GuiObserver(progressBar, statusLabel, convertButton) {
             @Override
             public void onProgressUpdate(String message, int progressPercentage) {
               Platform.runLater(() -> {

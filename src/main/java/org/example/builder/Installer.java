@@ -21,11 +21,11 @@ import org.example.observer.InstallationSubject;
 import org.example.processor.EncryptionProcessor;
 import org.example.processor.FileProcessor;
 
-public class Installer extends InstallationSubject {
+public class Installer{
   private InputFile file;
   private ConversionSettings settings;
   private OutputFile outputFile;
-
+  private final InstallationSubject subject = new InstallationSubject();
   public Installer(InputFile file, ConversionSettings settings, OutputFile outputFile) {
     this.file = file;
     this.settings = settings;
@@ -41,40 +41,30 @@ public class Installer extends InstallationSubject {
     ConverterFactory factory = ConverterFactorySelector.getFactory(file.getFileType().toString(), outputFile.getFileType().toString());
     Converter baseConverter  = factory.createConverter();
 
-    FileProcessor processor = new BaseProcessor(baseConverter, file.getFilePath(), outputFile.getFilePath());
-
-    notifyObservers("Converting file...", 50);
-
-    try {
-      //baseConverter.convert(file.getFilePath(), outputFile.getFilePath());
-      //processor.process();
-      notifyObservers("Package generation completed successfully!", 100);
-      notifyCompletion();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    FileProcessor processor = new BaseProcessor(baseConverter, file.getFilePath(), outputFile.getFilePath(), (message, progress) -> subject.notifyObservers(message, progress));
 
     // Adjust processor based on settings
     if (settings.isEnableEncryption()) {
-      notifyObservers("Encrypting...", 80);
-      processor = new EncryptionProcessor(new BlowfishEncryptionStrategy(), processor,  outputFile.getFilePath(), "mysecretkey12345");
+      processor = new EncryptionProcessor(new BlowfishEncryptionStrategy(), processor,  outputFile.getFilePath(), "mysecretkey12345",
+          (message, progress) -> subject.notifyObservers(message, progress));
 
       if (settings.isEnableCompression()) {
-        processor = new CompressionProcessor(processor);
+        processor = new CompressionProcessor(processor, (message, progress) -> subject.notifyObservers(message, progress));
       }
     } else if (settings.isEnableCompression()) {
-      processor = new CompressionProcessor(processor);
+      processor = new CompressionProcessor(processor, (message, progress) -> subject.notifyObservers(message, progress));
     }
 
     if (!settings.isEnableEncryption() && !settings.isEnableCompression() && settings.isAddShortcut()) {
-      processor = new ShortcutProcessor(processor, true);
+      processor = new ShortcutProcessor(processor, true, (message, progress) -> subject.notifyObservers(message, progress));
     }
 
     try {
       processor.process();
       notifyObservers("Processing completed successfully!", 100);
+      notifyCompletion();
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      notifyError("Failed to generate package: " + e.getMessage());
     }
 
 
@@ -96,6 +86,22 @@ public class Installer extends InstallationSubject {
     WixFileGenerator wixGenerator = new WixFileGenerator(file);
     wixGenerator.exportToFile(filePath);
   }
+  public void addObserver(InstallationObserver observer) {
+    subject.addObserver(observer);
+  }
+
+  public void notifyObservers(String message, int progressPercentage) {
+    subject.notifyObservers(message, progressPercentage);
+  }
+
+  public void notifyCompletion() {
+    subject.notifyCompletion();
+  }
+
+  public void notifyError(String errorMessage) {
+    subject.notifyError(errorMessage);
+  }
+
 
 
   public static class Builder {
@@ -130,5 +136,6 @@ public class Installer extends InstallationSubject {
       }
       return installer;
     }
+
   }
 }

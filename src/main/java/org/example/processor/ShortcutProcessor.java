@@ -1,19 +1,23 @@
 package org.example.processor;
 
 import java.io.File;
+import java.util.function.BiConsumer;
 import org.example.converter.ShortcutCreator;
 
 public class ShortcutProcessor implements FileProcessor {
   private final FileProcessor wrapped;
   private final boolean addShortcut;
+  BiConsumer<String, Integer> notifier;
 
-  public ShortcutProcessor(FileProcessor wrapped, boolean addShortcut) {
+  public ShortcutProcessor(FileProcessor wrapped, boolean addShortcut, BiConsumer<String, Integer> notifier) {
     this.wrapped = wrapped;
     this.addShortcut = addShortcut;
+    this.notifier = notifier;
   }
 
   @Override
   public String process() throws Exception {
+    notifier.accept("Creating shortcut...", 70);
     // Спочатку виконуємо обгортковий процес
     String outputFile = wrapped.process();
 

@@ -50,6 +50,8 @@
 
   <CheckBox fx:id="enableEncryptionCheckBox" text="Enable Encryption" disable="true" />
   <CheckBox fx:id="enableCompressionCheckBox" text="Enable compression" disable="false" />
+  <CheckBox fx:id="createShortcutCheckBox" text="Create shortcut on Desktop" />
+
 
   <!-- Кнопка конвертації -->
   <Button fx:id="convertButton" text="Convert" onAction="#handleConvert" style="-fx-background-color: #32CD32; -fx-text-fill: white; -fx-font-size: 16px; -fx-border-radius: 5; -fx-background-radius: 5;" />

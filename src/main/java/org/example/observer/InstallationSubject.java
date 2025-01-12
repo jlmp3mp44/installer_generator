@@ -25,4 +25,12 @@ public class InstallationSubject {
       observer.onCompletion();
     }
   }
+  public void notifyError(String errorMessage) {
+    for (InstallationObserver observer : observers) {
+      if (observer instanceof GuiObserver) {
+        ((GuiObserver) observer).onError(errorMessage);
+      }
+    }
+  }
+
 }
