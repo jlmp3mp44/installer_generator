@@ -149,26 +149,10 @@ public class JarConverterController {
           .addFile(inputFile)
           .setConversionSettings(settings)
           .setOutputFile(outputFile)
-          .addObserver(new GuiObserver(progressBar, statusLabel, convertButton) {
-            @Override
-            public void onProgressUpdate(String message, int progressPercentage) {
-              Platform.runLater(() -> {
-                statusLabel.setText(message);
-                if (progressPercentage >= 0) {
-                  progressBar.setProgress(progressPercentage / 100.0);
-                }
-              });
-            }
-
-            @Override
-            public void onCompletion() {
-              Platform.runLater(() -> {
-                statusLabel.setText("Conversion completed successfully!");
-                convertButton.setDisable(false);
-              });
-            }
-          })
+          .addObserver(new GuiObserver(progressBar, statusLabel, convertButton) )
           .build();
+
+
 
       int userId = Session.getUserId();
       // Відправка запиту на сервер
@@ -188,9 +172,9 @@ public class JarConverterController {
         return;
       }
 
-      new Thread(installer::generatePackage).start();
     } catch (IllegalArgumentException e) {
       Platform.runLater(() -> {
+
         statusLabel.setText("Validation Error: " + e.getMessage());
         convertButton.setDisable(false);
       });

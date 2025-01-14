@@ -24,5 +24,18 @@ public class FileDao {
       return "Error: " + e.getMessage();
     }
   }
+
+  public void updateInstallationResult(int fileId, String status, String errorMessage) {
+    String query = "UPDATE files SET status = ?, error_message = ? WHERE id = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(query)) {
+      stmt.setString(1, status); // 'SUCCESS' або 'FAILURE'
+      stmt.setString(2, errorMessage); // повідомлення про помилку або NULL
+      stmt.setInt(3, fileId); // ID файлу
+      stmt.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
 }
 

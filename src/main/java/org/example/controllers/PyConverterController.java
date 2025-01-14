@@ -2,6 +2,7 @@ package org.example.controllers;
 
 
 import javafx.scene.control.CheckBox;
+import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import org.example.entities.ConversionSettings;
 import org.example.entities.InputFile;
@@ -61,6 +62,12 @@ public class PyConverterController {
   private CheckBox createShortcutCheckBox;
 
 
+  @FXML
+  private ComboBox<String> encryptionMethod;
+
+  @FXML
+  private HBox encryptionSettings;
+
   private Client client;
 
 
@@ -75,6 +82,7 @@ public class PyConverterController {
     Session.getUserState().enableEncryptionFeature(enableEncryptionCheckBox);
     Session.getUserState().enableCompressionFeature(enableCompressionCheckBox);
   }
+
 
   @FXML
   private void browsePyFile(ActionEvent event) {
@@ -114,6 +122,12 @@ public class PyConverterController {
     boolean compressionEnambled = enableCompressionCheckBox.isSelected();
     boolean createShortcut = createShortcutCheckBox.isSelected();
 
+    String encryptionAlgorithm = encryptionEnabled ? encryptionMethod.getValue() : null;
+
+    if (encryptionEnabled && (encryptionAlgorithm == null || encryptionAlgorithm.isEmpty())) {
+      statusLabel.setText("Please select an encryption method.");
+      return;
+    }
 
     // Зробити кнопку недоступною
     convertButton.setDisable(true);

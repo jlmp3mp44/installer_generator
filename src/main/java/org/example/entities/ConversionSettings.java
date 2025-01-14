@@ -3,7 +3,6 @@ package org.example.entities;
 public class ConversionSettings {
   private boolean addShortcut;
   private String installPath;
-  private String licenseKey;
   private boolean enableEncryption;
   private boolean enableCompression;
 
@@ -39,12 +38,5 @@ public class ConversionSettings {
     this.installPath = installPath;
   }
 
-  public String getLicenseKey() {
-    return licenseKey;
-  }
-
-  public void setLicenseKey(String licenseKey) {
-    this.licenseKey = licenseKey;
-  }
 
 }

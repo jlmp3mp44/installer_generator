@@ -102,6 +102,9 @@ public class Installer{
     subject.notifyError(errorMessage);
   }
 
+  public void reportError(String errorMessage) {
+    notifyError(errorMessage);
+  }
 
 
   public static class Builder {
