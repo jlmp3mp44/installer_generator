@@ -9,6 +9,8 @@ import org.example.converter.factory.ConverterFactorySelector;
 import org.example.processor.BaseProcessor;
 import org.example.processor.BlowfishEncryptionStrategy;
 import org.example.processor.CompressionProcessor;
+import org.example.processor.EncryptionStrategy;
+import org.example.processor.EncryptionStrategyFactory;
 import org.example.processor.ShortcutProcessor;
 import org.example.entities.ConversionSettings;
 import org.example.entities.InputFile;
@@ -45,6 +47,9 @@ public class Installer{
 
     // Adjust processor based on settings
     if (settings.isEnableEncryption()) {
+      String encryptionType = settings.getEncryptionStrategy(); // Отримуємо тип шифрування
+      EncryptionStrategy encryptionStrategy = EncryptionStrategyFactory.getStrategy(encryptionType);
+
       processor = new EncryptionProcessor(new BlowfishEncryptionStrategy(), processor,  outputFile.getFilePath(), "mysecretkey12345",
           (message, progress) -> subject.notifyObservers(message, progress));
 

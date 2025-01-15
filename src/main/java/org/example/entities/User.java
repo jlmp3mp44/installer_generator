@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import org.example.validation.FileExistsHandler;
+import org.example.validation.FileFormatHandler;
 import org.example.validation.MinLengthHandler;
 import org.example.validation.NotEmptyHandler;
 import org.example.validation.UsernameFormatHandler;
@@ -9,22 +11,32 @@ public class User {
   private String username;
   private String password;
   private boolean license;
-  private final ValidationHandler usernameValidator = new NotEmptyHandler().setNext(new UsernameFormatHandler());
-  private final ValidationHandler passwordValidator =  new NotEmptyHandler().setNext(new MinLengthHandler(6));
-
+  private ValidationHandler usernameValidator;
+  private ValidationHandler passwordValidator;
 
   public User(String username, String password) {
     this.username = username;
     this.password = password;
+    initializeValidator();
   }
 
   public User(String username, String password, boolean license) {
     this.username = username;
     this.password = password;
     this.license = false;
+    initializeValidator();
   }
 
-  public void validate(){
+  private void initializeValidator() {
+    usernameValidator = new NotEmptyHandler();
+    usernameValidator.setNext(new UsernameFormatHandler());
+
+    passwordValidator = new NotEmptyHandler();
+    passwordValidator.setNext(new MinLengthHandler(6));
+  }
+
+
+  public void validate() {
     usernameValidator.validate("Username", username);
     passwordValidator.validate("Password", password);
   }

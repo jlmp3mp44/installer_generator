@@ -1,10 +1,13 @@
 package org.example.entities;
 
+import org.example.processor.EncryptionStrategy;
+
 public class ConversionSettings {
   private boolean addShortcut;
   private String installPath;
   private boolean enableEncryption;
   private boolean enableCompression;
+  private String encryptionStrategy;
 
   public boolean isEnableEncryption() {
     return enableEncryption;
@@ -38,5 +41,11 @@ public class ConversionSettings {
     this.installPath = installPath;
   }
 
+  public String getEncryptionStrategy() {
+    return encryptionStrategy;
+  }
 
+  public void setEncryptionStrategy(String encryptionStrategy) {
+    this.encryptionStrategy = encryptionStrategy;
+  }
 }

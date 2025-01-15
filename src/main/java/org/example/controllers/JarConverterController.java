@@ -26,6 +26,8 @@ import org.example.observer.GuiObserver;
 import org.example.observer.InstallationObserver;
 
 import java.io.File;
+import org.example.processor.EncryptionStrategy;
+import org.example.processor.EncryptionStrategyFactory;
 import org.example.server.Client;
 import org.example.state.Session;
 
@@ -62,6 +64,9 @@ public class JarConverterController {
   @FXML
   private CheckBox createShortcutCheckBox;
 
+  @FXML
+  private ComboBox<String> encryptionMethod;
+
   private Client client;
 
 
@@ -72,6 +77,12 @@ public class JarConverterController {
 
   @FXML
   public void initialize() {
+    // Ініціалізація залежності стану елемента `encryptionMethod` від стану `enableEncryptionCheckBox`
+    enableEncryptionCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      encryptionMethod.setDisable(!newValue); // Включити ComboBox, якщо чекбокс обраний
+    });
+
+    // Ініціалізація інших чекбоксів
     Session.getUserState().enableEncryptionFeature(enableEncryptionCheckBox);
     Session.getUserState().enableCompressionFeature(enableCompressionCheckBox);
   }
@@ -118,6 +129,23 @@ public class JarConverterController {
     boolean compressionEnambled = enableCompressionCheckBox.isSelected();
     boolean createShortcut = createShortcutCheckBox.isSelected();
 
+    String encryptionAlgorithm = encryptionEnabled ? encryptionMethod.getValue() : null;
+
+    if (encryptionEnabled && (encryptionAlgorithm == null || encryptionAlgorithm.isEmpty())) {
+      statusLabel.setText("Please select an encryption method.");
+      return;
+    }
+
+    EncryptionStrategy encryptionStrategy = null;
+    if (encryptionEnabled) {
+      try {
+        encryptionStrategy = EncryptionStrategyFactory.getStrategy(encryptionAlgorithm);
+      } catch (IllegalArgumentException e) {
+        statusLabel.setText("Invalid encryption method selected.");
+        return;
+      }
+    }
+
     String jarFile = jarFilePath.getText();
     String saveLocation = savePath.getText();
     String format = outputFormat.getValue();
@@ -143,6 +171,7 @@ public class JarConverterController {
       settings.setEnableEncryption(encryptionEnabled);
       settings.setEnableCompression(compressionEnambled);
       settings.setAddShortcut(createShortcut);
+      settings.setEncryptionStrategy(encryptionAlgorithm);
       settings.setInstallPath(saveLocation);
       outputFile =  new OutputFile(outputFilePath, desiredFileName, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
       Installer installer = new Installer.Builder()
@@ -171,13 +200,11 @@ public class JarConverterController {
         convertButton.setDisable(false);
         return;
       }
-
+      new Thread(() -> installer.generatePackage()).start();
     } catch (IllegalArgumentException e) {
-      Platform.runLater(() -> {
-
-        statusLabel.setText("Validation Error: " + e.getMessage());
-        convertButton.setDisable(false);
-      });
+      // Відображення повідомлення про помилку
+      statusLabel.setText("Validation Error: " + e.getMessage());
+      convertButton.setDisable(false); // Знову зробити кнопку доступною
     }
 
   }

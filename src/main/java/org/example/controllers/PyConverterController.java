@@ -7,6 +7,8 @@ import javafx.stage.DirectoryChooser;
 import org.example.entities.ConversionSettings;
 import org.example.entities.InputFile;
 import org.example.entities.OutputFile;
+import org.example.processor.EncryptionStrategy;
+import org.example.processor.EncryptionStrategyFactory;
 import org.example.server.Client;
 import org.example.state.Session;
 import java.io.IOException;
@@ -61,12 +63,9 @@ public class PyConverterController {
   @FXML
   private CheckBox createShortcutCheckBox;
 
-
   @FXML
   private ComboBox<String> encryptionMethod;
 
-  @FXML
-  private HBox encryptionSettings;
 
   private Client client;
 
@@ -78,10 +77,17 @@ public class PyConverterController {
   }
 
   @FXML
-  public void initialize() {
+  private void initialize() {
+    // Ініціалізація залежності стану елемента `encryptionMethod` від стану `enableEncryptionCheckBox`
+      enableEncryptionCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      encryptionMethod.setDisable(!newValue); // Включити ComboBox, якщо чекбокс обраний
+    });
+
+    // Ініціалізація інших чекбоксів
     Session.getUserState().enableEncryptionFeature(enableEncryptionCheckBox);
     Session.getUserState().enableCompressionFeature(enableCompressionCheckBox);
   }
+
 
 
   @FXML
@@ -129,6 +135,17 @@ public class PyConverterController {
       return;
     }
 
+    EncryptionStrategy encryptionStrategy = null;
+    if (encryptionEnabled) {
+      try {
+        encryptionStrategy = EncryptionStrategyFactory.getStrategy(encryptionAlgorithm);
+      } catch (IllegalArgumentException e) {
+        statusLabel.setText("Invalid encryption method selected.");
+        return;
+      }
+    }
+
+
     // Зробити кнопку недоступною
     convertButton.setDisable(true);
     statusLabel.setText("Initializing conversion...");
@@ -158,6 +175,7 @@ public class PyConverterController {
       settings.setEnableCompression(compressionEnambled);
       settings.setAddShortcut(createShortcut);
       settings.setAddShortcut(true);
+      settings.setEncryptionStrategy(encryptionAlgorithm);
       settings.setInstallPath(saveDirectory);
       outputFile = new OutputFile(outputFilePath, fileName, format.equalsIgnoreCase("EXE") ? OutputFile.FileType.EXE : OutputFile.FileType.MSI);
       Installer installer = new Installer.Builder()
@@ -181,6 +199,11 @@ public class PyConverterController {
                 statusLabel.setText("Conversion completed successfully!");
                 convertButton.setDisable(false);
               });
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
             }
           })
           .build();

@@ -36,7 +36,7 @@ public class Server {
   }
 
   private static void initializeDatabase() throws IOException, SQLException {
-    connection = DatabaseUtil.getConnection();
+    connection = DatabaseUtil.getInstance().getConnection();
     System.out.println("Database connected.");
   }
 
@@ -46,13 +46,14 @@ public class Server {
     private LicenseDao licenseDao;
     private FileDao fileDao;
 
-    public ClientHandler(Socket socket) {
-
+    public ClientHandler(Socket socket) throws IOException, SQLException {
       this.socket = socket;
+      Connection connection = DatabaseUtil.getInstance().getConnection();
       this.userDao = new UserDao(connection);
       this.licenseDao = new LicenseDao(connection);
       this.fileDao = new FileDao(connection);
     }
+
 
     @Override
     public void run() {

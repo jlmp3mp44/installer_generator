@@ -19,6 +19,7 @@ public class BaseProcessor implements FileProcessor {
   @Override
   public String process() throws Exception {
     notifier.accept("Converting...", 50);
+    System.out.println("Notifier called with progress: 70");
       converter.convert(inputFile, outputFile);
       return outputFile;
   }
