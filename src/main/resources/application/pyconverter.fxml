@@ -10,8 +10,8 @@
 
   <!-- Заголовок -->
   <Label text="Python File Converter" style="-fx-font-size: 24px; -fx-text-fill: #2F4F4F;" wrapText="true"/>
-  <ProgressBar fx:id="progressBar" prefWidth="400" progress="0.0"/>
-  <Label fx:id="statusLabel" text="Status: Waiting..." />
+  <ProgressBar fx:id="progressBar" prefWidth="400" progress="0.0" style="-fx-accent: #FFD700;"/>
+  <Label fx:id="statusLabel" text="Status: Waiting..." style="-fx-font-size: 20px;"/>
 
   <!-- Вибір файлу -->
   <HBox spacing="10" alignment="CENTER">

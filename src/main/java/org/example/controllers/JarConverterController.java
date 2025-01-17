@@ -133,6 +133,7 @@ public class JarConverterController {
 
     if (encryptionEnabled && (encryptionAlgorithm == null || encryptionAlgorithm.isEmpty())) {
       statusLabel.setText("Please select an encryption method.");
+      progressBar.setProgress(20);
       return;
     }
 

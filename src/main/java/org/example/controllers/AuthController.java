@@ -62,6 +62,11 @@ public class AuthController {
         showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
         navigateToWelcome(event);
       }
+      else if (response.equals("User does not exist.")) {
+        showAlert(Alert.AlertType.ERROR, "Login Failed", "The username you entered does not exist. Please register.");
+      } else if (response.equals("Invalid password.")) {
+        showAlert(Alert.AlertType.ERROR, "Login Failed", "The password you entered is incorrect. Please try again.");
+      }
       else {
         showAlert(Alert.AlertType.ERROR, "Login Failed", response);
       }

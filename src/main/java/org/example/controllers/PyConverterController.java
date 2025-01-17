@@ -7,6 +7,7 @@ import javafx.stage.DirectoryChooser;
 import org.example.entities.ConversionSettings;
 import org.example.entities.InputFile;
 import org.example.entities.OutputFile;
+import org.example.observer.GuiObserver;
 import org.example.processor.EncryptionStrategy;
 import org.example.processor.EncryptionStrategyFactory;
 import org.example.server.Client;
@@ -86,6 +87,8 @@ public class PyConverterController {
     // Ініціалізація інших чекбоксів
     Session.getUserState().enableEncryptionFeature(enableEncryptionCheckBox);
     Session.getUserState().enableCompressionFeature(enableCompressionCheckBox);
+    progressBar.setProgress(0.0);
+
   }
 
 
@@ -182,30 +185,7 @@ public class PyConverterController {
           .addFile(inputFile)
           .setConversionSettings(settings)
           .setOutputFile(outputFile)
-          .addObserver(new InstallationObserver() {
-            @Override
-            public void onProgressUpdate(String message, int progressPercentage) {
-              Platform.runLater(() -> {
-                statusLabel.setText(message);
-                if (progressPercentage >= 0) {
-                  progressBar.setProgress(progressPercentage / 100.0);
-                }
-              });
-            }
-
-            @Override
-            public void onCompletion() {
-              Platform.runLater(() -> {
-                statusLabel.setText("Conversion completed successfully!");
-                convertButton.setDisable(false);
-              });
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-
-            }
-          })
+          .addObserver(new GuiObserver(progressBar, statusLabel, convertButton) )
           .build();
 
       String saveRequest = String.format("SAVE_FILE %d %s %s %s %s %s",

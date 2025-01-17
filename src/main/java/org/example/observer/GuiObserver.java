@@ -17,10 +17,19 @@ public class GuiObserver implements InstallationObserver {
   }
 
   @Override
-  public void onProgressUpdate(String message, int progressPercentage) {
+  public void onProgressUpdate(String message, int progress) {
+    // Оновлення елементів GUI через JavaFX Application Thread
     Platform.runLater(() -> {
-      statusLabel.setText(message);
-      progressBar.setProgress(progressPercentage / 100.0);
+      statusLabel.setText("Status: " + message);
+      progressBar.setProgress(progress / 100.0);
+
+      // Увімкнення кнопки після завершення
+      if (progress == 100) {
+        convertButton.setDisable(false);
+        statusLabel.setText("Status: Completed!");
+      } else {
+        convertButton.setDisable(true); // Вимкнення кнопки під час роботи
+      }
     });
   }
 

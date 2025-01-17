@@ -11,10 +11,10 @@
 
   <Label text="Welcome to the installer generator" style="-fx-font-size: 24px; -fx-text-fill: white;" wrapText="true"/>
 
-  <Label text="This application can convert your py or jar files to exe or msi format. Choose file paths, enter license keys if needed, or create a desktop shortcut."
+  <Label text="This application can convert your py or jar files to exe or msi format. Choose file paths, if needed create a desktop shortcut."
     style="-fx-font-size: 16px; -fx-text-fill: white;" wrapText="true"/>
 
-  <Label text="For premium users, additional features such as file encryption and compression are available. You can secure your files with RSA encryption or compress them to save space before converting them into executable formats."
+  <Label text="For premium users, additional features such as file encryption and compression are available. You can secure your files with AES or Blowfish encryption or compress them to save space before converting them into executable formats."
     style="-fx-font-size: 16px; -fx-text-fill: white;" wrapText="true"/>
 
   <Label text="With this tool, you can streamline the distribution of your Python or Java applications, ensuring they are user-friendly and ready for deployment. Whether you're a developer looking to simplify your workflow or a team seeking a reliable installer solution, this application has you covered."
