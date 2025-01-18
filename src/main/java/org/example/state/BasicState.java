@@ -6,7 +6,7 @@ public class BasicState implements UserState {
 
   @Override
   public boolean isPremium() {
-    return false; // Не преміумний стан
+    return false;
   }
 
   @Override

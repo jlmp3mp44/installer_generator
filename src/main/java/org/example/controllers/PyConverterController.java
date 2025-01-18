@@ -1,6 +1,5 @@
 package org.example.controllers;
 
-
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
@@ -67,37 +66,26 @@ public class PyConverterController {
   @FXML
   private ComboBox<String> encryptionMethod;
 
-
   private Client client;
 
-
   public PyConverterController() {
-
     client =  new Client();
-
   }
-
   @FXML
   private void initialize() {
-    // Ініціалізація залежності стану елемента `encryptionMethod` від стану `enableEncryptionCheckBox`
       enableEncryptionCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      encryptionMethod.setDisable(!newValue); // Включити ComboBox, якщо чекбокс обраний
+      encryptionMethod.setDisable(!newValue);
     });
-
-    // Ініціалізація інших чекбоксів
     Session.getUserState().enableEncryptionFeature(enableEncryptionCheckBox);
     Session.getUserState().enableCompressionFeature(enableCompressionCheckBox);
-    progressBar.setProgress(0.0);
 
   }
-
-
 
   @FXML
   private void browsePyFile(ActionEvent event) {
     FileChooser fileChooser = new FileChooser();
     fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Python Files", "*.py"));
-    File initialDirectory = new File("D:\\trpz_courcework\\test"); // Вкажіть директорію
+    File initialDirectory = new File("D:\\trpz_courcework\\test");
     fileChooser.setInitialDirectory(initialDirectory);
     File selectedFile = fileChooser.showOpenDialog(new Stage());
     if (selectedFile != null) {
@@ -109,18 +97,16 @@ public class PyConverterController {
   private void browseSavePath(ActionEvent event) {
     DirectoryChooser directoryChooser = new DirectoryChooser();
     directoryChooser.setTitle("Select Save Directory");
-    File initialDirectory = new File("D:\\trpz_courcework\\test"); // Вкажіть директорію
+    File initialDirectory = new File("D:\\trpz_courcework\\test");
     directoryChooser.setInitialDirectory(initialDirectory);
     File selectedDirectory = directoryChooser.showDialog(new Stage());
     if (selectedDirectory != null) {
-      // Встановлюємо тільки шлях до директорії
       savePath.setText(selectedDirectory.getAbsolutePath());
     }
   }
 
   @FXML
   private void handleExit(ActionEvent event) {
-    // Закриває програму
     Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
     currentStage.close();
   }
@@ -148,18 +134,14 @@ public class PyConverterController {
       }
     }
 
-
-    // Зробити кнопку недоступною
     convertButton.setDisable(true);
     statusLabel.setText("Initializing conversion...");
 
     try {
-
       if (outputFileName.getText() == null || outputFileName.getText().trim().isEmpty()) {
         throw new IllegalArgumentException("Output file name cannot be empty.");
       }
 
-      // Підготовка до конвертації
       String pyFile = pyFilePath.getText();
       String saveDirectory = savePath.getText();
       String fileName = outputFileName.getText().trim();
@@ -189,7 +171,7 @@ public class PyConverterController {
           .build();
 
       String saveRequest = String.format("SAVE_FILE %d %s %s %s %s %s",
-          1, // user_id, замініть на реального користувача
+          1,
           inputFile.getFilePath(),
           inputFile.getFileType().name(),
           outputFile.getFilePath(),
@@ -205,9 +187,8 @@ public class PyConverterController {
       }
       new Thread(installer::generatePackage).start();
     } catch (IllegalArgumentException e) {
-      // Відображення повідомлення про помилку
       statusLabel.setText("Validation Error: " + e.getMessage());
-      convertButton.setDisable(false); // Знову зробити кнопку доступною
+      convertButton.setDisable(false);
     }
   }
 

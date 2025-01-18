@@ -26,14 +26,13 @@ public class Client {
       e.printStackTrace();
     }
   }
-
   public String sendRequest(String request) {
     try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
 
       out.println(request);
-      return in.readLine(); // Read server response
+      return in.readLine();
     } catch (IOException e) {
       e.printStackTrace();
       return "Error: Unable to connect to server.";

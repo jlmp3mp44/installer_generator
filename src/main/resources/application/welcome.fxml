@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.*?>
 
 <VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/20"
   xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.WelcomeController"

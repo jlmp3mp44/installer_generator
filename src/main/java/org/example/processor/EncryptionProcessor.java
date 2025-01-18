@@ -18,7 +18,6 @@ public class EncryptionProcessor implements FileProcessor {
     this.notifier = notifier;
   }
 
-
   @Override
   public String process() throws Exception {
     outputFile = wrapped.process();
@@ -28,13 +27,7 @@ public class EncryptionProcessor implements FileProcessor {
     if (!input.exists() || input.length() == 0) {
       throw new RuntimeException("Input file is missing or empty: " + outputFile);
     }
-
-    System.out.println("Encrypting file: " + outputFile);
-
-    // Виконання шифрування
-   outputFile =  strategy.encrypt(outputFile, key);
-
-    System.out.println("Encryption completed. Output file: " + outputFile);
+    outputFile =  strategy.encrypt(outputFile, key);
     return outputFile;
   }
 }

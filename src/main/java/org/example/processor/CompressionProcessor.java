@@ -12,7 +12,6 @@ public class CompressionProcessor implements FileProcessor {
   private String outputFile;
   private final BiConsumer<String, Integer> notifier;
 
-
   public CompressionProcessor(FileProcessor wrapped, BiConsumer<String, Integer> notifier) {
     this.wrapped = wrapped;
     this.notifier = notifier;
@@ -20,16 +19,12 @@ public class CompressionProcessor implements FileProcessor {
 
   @Override
   public String process() throws Exception {
-    // Спочатку виконуємо обгортковий процес
     outputFile = wrapped.process();
     notifier.accept("Compressing...", 80);
 
-
-    // Додаємо логіку стиснення
     String compressedFile = outputFile + ".zip";
     compressFile(outputFile, compressedFile);
 
-    System.out.println("Файл успішно стиснутий до: " + compressedFile);
     return outputFile;
   }
 

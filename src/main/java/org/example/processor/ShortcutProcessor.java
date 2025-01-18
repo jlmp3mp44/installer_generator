@@ -18,14 +18,10 @@ public class ShortcutProcessor implements FileProcessor {
   @Override
   public String process() throws Exception {
     notifier.accept("Creating shortcut...", 70);
-    // Спочатку виконуємо обгортковий процес
     String outputFile = wrapped.process();
-
-    // Додаємо логіку створення ярлика
     if (addShortcut) {
       createShortcut(outputFile, getOutputFileNameWithoutExtension(outputFile));
     }
-
     return outputFile;
   }
 

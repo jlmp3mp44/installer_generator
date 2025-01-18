@@ -12,13 +12,10 @@ public class CombinedJarToMsiConverter implements Converter{
 
   public void convert(String jarPath, String msiPath) {
     try {
-      // Тимчасовий шлях для EXE-файлу
       String exePath = jarPath.replace(".jar", ".exe");
 
-      // Конвертація JAR → EXE
       jarToExeConverter.convert(jarPath, exePath);
 
-      // Конвертація EXE → MSI
       jarToMsiConverter.convert(exePath, msiPath);
 
       System.out.println("Конвертація JAR → MSI завершена успішно!");

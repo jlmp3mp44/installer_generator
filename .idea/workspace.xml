@@ -6,11 +6,41 @@
   <component name="ChangeListManager">
     <list default="true" id="93f6d455-4912-4ace-8f2b-c2022d5da013" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/builder/Installer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/builder/Installer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controllers/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controllers/JarConverterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controllers/JarConverterController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controllers/PyConverterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controllers/PyConverterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controllers/WelcomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controllers/WelcomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/converter.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/converter/CombinedJarToMsiConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/converter/CombinedJarToMsiConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/converter/JarToExeConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/converter/JarToExeConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/converter/JarToMsiConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/converter/JarToMsiConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/converter/PyToExeConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/converter/PyToExeConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/converter/PyToMsiConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/converter/PyToMsiConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/observer/GuiObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/observer/GuiObserver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/AESEncryptionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/AESEncryptionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/BaseProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/BaseProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/BlowfishEncryptionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/BlowfishEncryptionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/CompressionProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/CompressionProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/EncryptionProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/EncryptionProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/EncryptionStrategyFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/EncryptionStrategyFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/processor/ShortcutProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/processor/ShortcutProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/server/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/server/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/server/dao/FileDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/server/dao/FileDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/server/dao/LicenseDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/server/dao/LicenseDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/server/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/server/dao/UserDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/state/BasicState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/state/BasicState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/state/PremiumState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/state/PremiumState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/state/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/state/Session.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/validation/FileFormatHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/validation/FileFormatHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/validation/MinLengthHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/validation/MinLengthHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/validation/ValidationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/validation/ValidationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application/jarconverter.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application/jarconverter.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application/login.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application/pyconverter.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application/pyconverter.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application/welcome.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application/welcome.fxml" afterDir="false" />
     </list>
@@ -134,6 +164,9 @@
       <workItem from="1736893149545" duration="1200000" />
       <workItem from="1736961814089" duration="11252000" />
       <workItem from="1737049787656" duration="9715000" />
+      <workItem from="1737076075714" duration="365000" />
+      <workItem from="1737109084554" duration="3184000" />
+      <workItem from="1737133038498" duration="7619000" />
     </task>
     <servers />
   </component>
@@ -143,21 +176,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/converter/PyToMsiConverter.java</url>
-          <line>39</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/converter/PyToMsiConverter.java</url>
-          <line>37</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/converter/PyToMsiConverter.java</url>
-          <line>51</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/processor/EncryptionProcessor.java</url>
           <line>2</line>
@@ -170,13 +188,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/controllers/PyConverterController.java</url>
-          <line>211</line>
+          <line>192</line>
           <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/server/Server.java</url>
-          <line>86</line>
-          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

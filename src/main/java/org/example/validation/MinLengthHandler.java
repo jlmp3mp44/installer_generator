@@ -6,7 +6,6 @@ public class MinLengthHandler extends ValidationHandler {
   public MinLengthHandler(int minLength) {
     this.minLength = minLength;
   }
-
   @Override
   public void validate(String fieldName, String value) {
     if (value == null || value.length() < minLength) {

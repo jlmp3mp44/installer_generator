@@ -4,11 +4,9 @@ import java.sql.*;
 
 public class LicenseDao {
   private final Connection connection;
-
   public LicenseDao(Connection connection) {
     this.connection = connection;
   }
-
   public String isValidLicenseKey(String licenseKey) {
     String query = "SELECT COUNT(*) FROM license_keys WHERE license_key = ?";
     try (PreparedStatement stmt = connection.prepareStatement(query)) {

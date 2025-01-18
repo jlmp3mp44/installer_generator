@@ -8,12 +8,9 @@ public class PyToExeConverter implements Converter {
     System.out.println("Converting Python file " + inputFilePath + " to EXE at " + outputFilePath);
 
     try {
-      // Визначаємо директорію збереження та ім'я файлу
       java.nio.file.Path outputPath = java.nio.file.Paths.get(outputFilePath);
       String saveDirectory = outputPath.getParent().toString();
       String outputFileName = outputPath.getFileName().toString();
-
-      // Формуємо команду для PyInstaller
       String command = String.join(" ",
           "pyinstaller",
           "--onefile",
@@ -22,11 +19,10 @@ public class PyToExeConverter implements Converter {
           inputFilePath
       );
 
-      // Викликаємо команду через командний рядок
       ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-      processBuilder.inheritIO();  // Спільний вивід і ввід для поточного процесу
+      processBuilder.inheritIO();
       Process process = processBuilder.start();
-      process.waitFor();  // Чекаємо завершення процесу
+      process.waitFor();
       System.out.println("Conversion completed!");
     } catch (IOException | InterruptedException e) {
       System.err.println("Error during conversion: " + e.getMessage());

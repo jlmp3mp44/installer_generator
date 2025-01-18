@@ -15,7 +15,6 @@ public class JarToMsiConverter implements Converter {
 
       File outputFile = new File(outputFilePath);
 
-      // Створюємо WiX XML конфігураційний файл
       String configFilePath = outputFilePath + ".wxs";
       Installer installer = new Installer.Builder()
           .addFile(new InputFile(inputFilePath, InputFile.FileType.JAR))
@@ -23,19 +22,13 @@ public class JarToMsiConverter implements Converter {
           .build();
       installer.exportWixXml(configFilePath);
 
-      // Виконання процесів WiX Toolset
       String candlePath = "D:\\trpz_courcework\\wix\\bin\\candle.exe";
       String lightPath = "D:\\trpz_courcework\\wix\\bin\\light.exe";
-
-
       String wixObjFilePath = configFilePath.replace(".wxs", ".wixobj");
 
-
-      // Виконання процесів WiX Toolset
       executeCommand(candlePath, configFilePath, "-out", wixObjFilePath);
       executeCommand(lightPath, "-out", outputFilePath, wixObjFilePath);
 
-      // Перевірка результату
       if (outputFile.exists()) {
         System.out.println("Конвертація завершена успішно! Файл збережено за адресою: " + outputFilePath);
       } else {
@@ -49,7 +42,7 @@ public class JarToMsiConverter implements Converter {
   }
 
   private void executeCommand(String... command) throws IOException, InterruptedException {
-    System.out.println("Executing command: " + String.join(" ", command)); // Додаємо логування команд
+    System.out.println("Executing command: " + String.join(" ", command));
 
     ProcessBuilder processBuilder = new ProcessBuilder(command);
     processBuilder.redirectErrorStream(true);
@@ -58,7 +51,7 @@ public class JarToMsiConverter implements Converter {
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
       String line;
       while ((line = reader.readLine()) != null) {
-        System.out.println(line); // Логуємо кожен рядок виводу
+        System.out.println(line);
       }
     }
     int exitCode = process.waitFor();

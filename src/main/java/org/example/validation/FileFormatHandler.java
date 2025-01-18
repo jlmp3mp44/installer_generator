@@ -7,7 +7,6 @@ public class FileFormatHandler extends ValidationHandler {
   public FileFormatHandler(String expectedExtension) {
     this.expectedExtension = expectedExtension.toLowerCase();
   }
-
   @Override
   public void validate(String fieldName, String value) {
     if (!value.toLowerCase().endsWith(expectedExtension)) {

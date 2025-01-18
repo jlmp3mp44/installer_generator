@@ -27,7 +27,6 @@ public class AuthController {
   @FXML
   private Button registerButton;
 
-
   @FXML
   private TextField licenseKeyField;
 
@@ -40,24 +39,21 @@ public class AuthController {
     client = new Client();
   }
 
-
   @FXML
   private void handleLogin(javafx.event.ActionEvent event) {
     String username = usernameField.getText();
     String password = passwordField.getText();
 
     try {
-      // Send login request to the server
       String response = client.sendRequest("LOGIN " + username + " " + password);
       if (response.contains("Premium User")) {
-        //Session.initializeState(true);
-        int userId = extractUserId(response); // Метод для вилучення userId із відповіді
+        int userId = extractUserId(response);
         Session.initializeState(userId, true);
         showAlert(Alert.AlertType.INFORMATION, "Login Successful, Premium user", "Welcome, " + username + "!");
         navigateToWelcome(event);
       }
       else if(response.contains("Regular User")){
-        int userId = extractUserId(response); // Метод для вилучення userId із відповіді
+        int userId = extractUserId(response);
         Session.initializeState(userId, false);
         showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
         navigateToWelcome(event);
@@ -89,7 +85,6 @@ public class AuthController {
 
       boolean isPremium = validateLicense(event);
       user.setLicense(true);
-      // Send register request to the server
       String response = client.sendRequest("REGISTER " + username + " " + password + " " + isPremium);
       if (response.equals("User registered successfully")) {
         showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "You can now log in.");
@@ -106,7 +101,6 @@ public class AuthController {
 
   @FXML
   private void handleExit(ActionEvent event) {
-    // Закриває програму
     Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
     currentStage.close();
   }
@@ -120,7 +114,6 @@ public class AuthController {
       if ("VALID_LICENSE".equals(licenseResponse)) {
         isLicenseValid = true;
         statusLabel.setText("License key is valid! Premium features unlocked.");
-        //enablePremiumFeatures();
         Session.initializeState(true);
       } else if ("INVALID_LICENSE".equals(licenseResponse)) {
         statusLabel.setText("Invalid license key. Registering without premium features.");
@@ -130,8 +123,6 @@ public class AuthController {
     }
     return isLicenseValid;
   }
-
-
 
   private void showAlert(Alert.AlertType alertType, String title, String content) {
     Alert alert = new Alert(alertType);
@@ -145,7 +136,7 @@ public class AuthController {
     try {
       Parent root = FXMLLoader.load(getClass().getResource("/application/welcome.fxml"));
       Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-      stage.setScene(new Scene(root));
+      stage.setScene(new Scene(root, 800,800));
       stage.show();
     } catch (IOException e) {
       e.printStackTrace();
@@ -154,13 +145,10 @@ public class AuthController {
   }
 
   private int extractUserId(String response) {
-    // Припускаємо, що сервер відповідає: "Login successful - Regular User userId:123"
     String[] parts = response.split("userId:");
     if (parts.length < 2) {
       throw new IllegalArgumentException("Invalid response format");
     }
     return Integer.parseInt(parts[1].trim());
   }
-
-
 }

@@ -7,7 +7,6 @@ public abstract class ValidationHandler {
     this.next = next;
     return next;
   }
-
   public void validate(String fieldName, String value) {
     if (next != null) {
       next.validate(fieldName, value);

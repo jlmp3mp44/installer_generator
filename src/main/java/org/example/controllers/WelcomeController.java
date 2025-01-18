@@ -24,24 +24,20 @@ public class WelcomeController {
 
   @FXML
   private void handleExit(ActionEvent event) {
-    // Закриває програму
     Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
     currentStage.close();
   }
 
   private void navigateToPage(ActionEvent event, String fxmlPath, String title) {
     try {
-      // Завантаження нової сторінки
       FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
       VBox root = loader.load();
 
-      // Створення нової сцени
       Stage stage = new Stage();
       stage.setTitle(title);
       stage.setScene(new Scene(root, 600, 600));
       stage.show();
 
-      // Закриття поточного вікна
       Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
       currentStage.close();
     } catch (IOException e) {

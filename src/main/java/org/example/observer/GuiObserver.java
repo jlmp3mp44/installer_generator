@@ -18,12 +18,12 @@ public class GuiObserver implements InstallationObserver {
 
   @Override
   public void onProgressUpdate(String message, int progress) {
-    // Оновлення елементів GUI через JavaFX Application Thread
+    System.out.println("GuiObserver received progress: " + progress + ", Message: " + message);
     Platform.runLater(() -> {
-      statusLabel.setText("Status: " + message);
+      System.out.println("Updating progress bar in GUI with progress: " + (progress / 100.0));
       progressBar.setProgress(progress / 100.0);
-
-      // Увімкнення кнопки після завершення
+      statusLabel.setText("Status: " + message);
+  // Увімкнення кнопки після завершення
       if (progress == 100) {
         convertButton.setDisable(false);
         statusLabel.setText("Status: Completed!");

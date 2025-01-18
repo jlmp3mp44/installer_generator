@@ -43,7 +43,7 @@ public class Installer{
     ConverterFactory factory = ConverterFactorySelector.getFactory(file.getFileType().toString(), outputFile.getFileType().toString());
     Converter baseConverter  = factory.createConverter();
 
-    FileProcessor processor = new BaseProcessor(baseConverter, file.getFilePath(), outputFile.getFilePath(), (message, progress) -> subject.notifyObservers(message, progress));
+    FileProcessor processor = new BaseProcessor(baseConverter, file.getFilePath(), outputFile.getFilePath(), (message, progress) -> subject.notifyObservers(message, progress), subject);
 
     // Adjust processor based on settings
     if (settings.isEnableEncryption()) {
@@ -72,8 +72,6 @@ public class Installer{
       notifyError("Failed to generate package: " + e.getMessage());
     }
 
-
-    //decryptAndLaunch();
     }
 
 
@@ -142,6 +140,7 @@ public class Installer{
       for (InstallationObserver observer : observers) {
         installer.addObserver(observer);
       }
+      System.out.println("Observers added: " + observers.size());
       return installer;
     }
 

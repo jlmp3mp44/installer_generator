@@ -1,7 +1,6 @@
 package org.example.processor;
 
 public class EncryptionStrategyFactory {
-
   public static EncryptionStrategy getStrategy(String type) {
     switch (type.toUpperCase()) {
       case "AES":

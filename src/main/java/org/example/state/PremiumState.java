@@ -8,7 +8,7 @@ public class PremiumState implements UserState {
 
   @Override
   public boolean isPremium() {
-    return true; // Преміумний стан
+    return true;
   }
 
   @Override

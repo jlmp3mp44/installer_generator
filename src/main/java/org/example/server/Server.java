@@ -16,10 +16,8 @@ public class Server {
 
   public static void main(String[] args) {
     try {
-      // Initialize database connection
       initializeDatabase();
 
-      // Start server socket
       ServerSocket serverSocket = new ServerSocket(PORT);
       System.out.println("Server started on port " + PORT);
 
@@ -27,7 +25,6 @@ public class Server {
         Socket clientSocket = serverSocket.accept();
         System.out.println("New client connected: " + clientSocket.getInetAddress());
 
-        // Handle client request in a new thread
         new ClientHandler(clientSocket).start();
       }
     } catch (IOException | SQLException e) {
@@ -63,7 +60,6 @@ public class Server {
         String request = in.readLine();
         System.out.println("Received request: " + request);
 
-        // Process request
         String response = handleRequest(request);
         out.println(response);
 
@@ -77,7 +73,6 @@ public class Server {
         }
       }
     }
-
     private String handleRequest(String request) {
       try {
         String[] parts = request.split(" ");

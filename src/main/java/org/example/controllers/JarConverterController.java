@@ -77,12 +77,9 @@ public class JarConverterController {
 
   @FXML
   public void initialize() {
-    // Ініціалізація залежності стану елемента `encryptionMethod` від стану `enableEncryptionCheckBox`
     enableEncryptionCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      encryptionMethod.setDisable(!newValue); // Включити ComboBox, якщо чекбокс обраний
+      encryptionMethod.setDisable(!newValue);
     });
-
-    // Ініціалізація інших чекбоксів
     Session.getUserState().enableEncryptionFeature(enableEncryptionCheckBox);
     Session.getUserState().enableCompressionFeature(enableCompressionCheckBox);
   }
@@ -91,7 +88,7 @@ public class JarConverterController {
   private void browseJarFile(ActionEvent event) {
     FileChooser fileChooser = new FileChooser();
     fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JAR Files", "*.jar"));
-    File initialDirectory = new File("D:\\trpz_courcework\\test"); // Вкажіть директорію
+    File initialDirectory = new File("D:\\trpz_courcework\\test");
     fileChooser.setInitialDirectory(initialDirectory);
     File selectedFile = fileChooser.showOpenDialog(new Stage());
     if (selectedFile != null) {
@@ -104,18 +101,16 @@ public class JarConverterController {
   private void browseSavePath(ActionEvent event) {
     DirectoryChooser directoryChooser = new DirectoryChooser();
     directoryChooser.setTitle("Select Save Directory");
-    File initialDirectory = new File("D:\\trpz_courcework\\test"); // Вкажіть директорію
+    File initialDirectory = new File("D:\\trpz_courcework\\test");
     directoryChooser.setInitialDirectory(initialDirectory);
     File selectedDirectory = directoryChooser.showDialog(new Stage());
     if (selectedDirectory != null) {
-      // Встановлюємо тільки шлях до директорії
       savePath.setText(selectedDirectory.getAbsolutePath());
     }
   }
 
   @FXML
   private void handleExit(ActionEvent event) {
-    // Закриває програму
     Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
     currentStage.close();
   }
@@ -133,7 +128,6 @@ public class JarConverterController {
 
     if (encryptionEnabled && (encryptionAlgorithm == null || encryptionAlgorithm.isEmpty())) {
       statusLabel.setText("Please select an encryption method.");
-      progressBar.setProgress(20);
       return;
     }
 
@@ -182,12 +176,9 @@ public class JarConverterController {
           .addObserver(new GuiObserver(progressBar, statusLabel, convertButton) )
           .build();
 
-
-
       int userId = Session.getUserId();
-      // Відправка запиту на сервер
       String saveRequest = String.format("SAVE_FILE %d %s %s %s %s %s",
-          userId, // user_id, замініть на реального користувача
+          userId,
           inputFile.getFilePath(),
           inputFile.getFileType().name(),
           outputFile.getFilePath(),
@@ -203,9 +194,8 @@ public class JarConverterController {
       }
       new Thread(() -> installer.generatePackage()).start();
     } catch (IllegalArgumentException e) {
-      // Відображення повідомлення про помилку
       statusLabel.setText("Validation Error: " + e.getMessage());
-      convertButton.setDisable(false); // Знову зробити кнопку доступною
+      convertButton.setDisable(false);
     }
 
   }

@@ -9,12 +9,10 @@ public class PyToMsiConverter implements Converter {
   public void convert(String inputFilePath, String outputFilePath) {
     System.out.println("Converting Python file " + inputFilePath + " to MSI at " + outputFilePath);
 
-    // Створюємо команду для cx_Freeze з конфігурацією для створення MSI
     String setupScript = "setup.py";
     String command = "python " + setupScript + " bdist_msi";
 
     try {
-      // Генеруємо файл setup.py
       String setupScriptContent = String.join("\n",
           "from cx_Freeze import setup, Executable",
           "setup(",
@@ -25,19 +23,16 @@ public class PyToMsiConverter implements Converter {
           ")"
       );
 
-      // Записуємо setup.py
       Files.write(
           Paths.get(setupScript),
           setupScriptContent.getBytes()
       );
 
-      // Викликаємо команду для створення MSI
       ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-      processBuilder.inheritIO();  // Спільний вивід і ввід
+      processBuilder.inheritIO();
       Process process = processBuilder.start();
-      process.waitFor();  // Чекаємо завершення
+      process.waitFor();
 
-      // Переміщуємо створений MSI до вихідної директорії
       Path msiPath = Paths.get("dist", "GeneratedApp-1.0-win64.msi");
       Files.move(msiPath, Paths.get(outputFilePath), StandardCopyOption.REPLACE_EXISTING);
 
@@ -46,7 +41,6 @@ public class PyToMsiConverter implements Converter {
       System.err.println("Error during conversion: " + e.getMessage());
       e.printStackTrace();
     } finally {
-      // Видаляємо тимчасові файли та директорії
       try {
         Files.deleteIfExists(Paths.get(setupScript));
         deleteDirectoryIfExists(Paths.get("dist"));
@@ -58,11 +52,10 @@ public class PyToMsiConverter implements Converter {
     }
   }
 
-  // Метод для видалення директорії разом з вмістом
   private void deleteDirectoryIfExists(Path directory) throws IOException {
     if (Files.exists(directory) && Files.isDirectory(directory)) {
       try (Stream<Path> files = Files.walk(directory)) {
-        files.sorted((p1, p2) -> p2.compareTo(p1))  // Видаляємо спочатку вміст, потім саму директорію
+        files.sorted((p1, p2) -> p2.compareTo(p1))
             .forEach(path -> {
               try {
                 Files.delete(path);
